@@ -1,0 +1,92 @@
+/**
+ * Variables CSS globales para el proyecto
+ * Centraliza colores, espaciados, transiciones y otros valores reutilizables
+ */
+
+:root {
+  /* Colores principales */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #1e3a8a;
+  --color-primary-light: #60a5fa;
+  --color-secondary: #f0f0f0;
+
+  /* Colores de estado */
+  --color-success: #4caf50;
+  --color-success-light: #e8f5e9;
+  --color-warning: #3b82f6;
+  --color-warning-light: #dbeafe;
+  --color-error: #f44336;
+  --color-info: #2196f3;
+
+  /* Colores de fondo */
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
+  --bg-gray: #e9ecef;
+  --bg-gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --bg-gradient-light: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%);
+
+  /* Colores de texto */
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-light: #999;
+  --text-white: #ffffff;
+
+  /* Bordes */
+  --border-color: #e0e0e0;
+  --border-color-light: #f0f0f0;
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.2);
+  --shadow-primary: 0 4px 12px rgba(30, 64, 175, 0.2);
+  --shadow-primary-lg: 0 8px 20px rgba(30, 64, 175, 0.3);
+
+  /* Transiciones */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-all: all 0.3s ease;
+  --transition-cubic: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Tipografía */
+  --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-mono: 'Courier New', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Z-index */
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-modal: 100;
+  --z-tooltip: 200;
+}
+
+/* Modo oscuro (para implementación futura) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Se pueden agregar variables para modo oscuro aquí */
+  }
+}
