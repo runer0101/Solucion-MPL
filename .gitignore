@@ -24,7 +24,6 @@ coverage
 *.sln
 *.sw?
 
-# Claude AI
 .claude/
 
 *.tsbuildinfo
