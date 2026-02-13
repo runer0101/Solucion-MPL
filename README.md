@@ -140,7 +140,7 @@ Los archivos compilados se generaran en el directorio `dist/`
 Solucion-MPL/
 ├── src/
 │   ├── components/
-│   │   ├── SimplexInput.vue       # Formulario con pestañas
+│   │   ├── SimplexInput.vue       # Formulario con pestañas (defineModel)
 │   │   ├── SimplexSolution.vue    # Visualizacion de soluciones
 │   │   ├── SimplexTable.vue       # Tabla Simplex iterativa
 │   │   ├── TransporteInput.vue    # Formulario de transporte
@@ -151,6 +151,10 @@ Solucion-MPL/
 │   │   ├── grafico.js            # Metodo Grafico
 │   │   ├── transporte.js         # Metodos de transporte
 │   │   └── formatters.js         # Formato numerico
+│   ├── directives/
+│   │   └── ripple.js             # Directiva v-ripple para botones
+│   ├── data/
+│   │   └── examples.js           # Ejemplos compartidos
 │   ├── assets/
 │   │   └── variables.css         # Variables CSS globales
 │   ├── App.vue                   # Componente raiz
@@ -160,7 +164,8 @@ Solucion-MPL/
 ├── .github/workflows/
 │   └── deploy.yml                # GitHub Actions CI/CD
 ├── vite.config.js                # Configuracion de Vite
-├── package.json                  # Dependencias
+├── jsconfig.json                 # Configuracion de paths (@/)
+├── package.json                  # Dependencias y scripts
 └── README.md                     # Documentacion
 ```
 
@@ -178,6 +183,17 @@ Solucion-MPL/
 | CSS3 | - | Estilos modernos |
 | GitHub Actions | - | CI/CD pipeline |
 | GitHub Pages | - | Hosting estatico |
+
+### Patrones Vue 3 Modernos Utilizados
+
+- **`<script setup>`** en todos los componentes (Composition API)
+- **`defineModel()`** para two-way binding declarativo (SimplexInput)
+- **`v-model:prop`** para comunicacion padre-hijo sin boilerplate
+- **Template refs** con `ref()` para acceso al DOM (IntersectionObserver)
+- **Directivas personalizadas** (`v-ripple`) para efectos reutilizables
+- **`computed()`** y **`watch()`** para reactividad derivada
+- **`nextTick()`** para operaciones post-render
+- **Modulo de datos compartido** para evitar duplicacion de ejemplos
 
 ---
 

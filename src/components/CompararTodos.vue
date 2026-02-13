@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { SimplexSolver } from '../utils/simplex.js'
 import { GraphicMethodSolver } from '../utils/grafico.js'
 import TransporteSolver from '../utils/transporte.js'
@@ -54,7 +54,7 @@ const loadExample = () => {
   numConstraints.value = 2
   problemType.value = 'max'
 
-  setTimeout(() => {
+  nextTick(() => {
     objectiveCoefficients.value = [3, 5]
     constraintCoefficients.value = [
       [1, 0],
@@ -62,7 +62,7 @@ const loadExample = () => {
     ]
     constraintRHS.value = [4, 12]
     constraintTypes.value = ['≤', '≤']
-  }, 0)
+  })
 }
 
 const loadTransportExample = () => {
@@ -75,49 +75,30 @@ const loadTransportExample = () => {
   numDestinos.value = 3
   problemType.value = 'min'
 
-  setTimeout(() => {
-    // Costos de transporte por unidad
-    // Origen 1: [10, 15, 20] a Destinos 1, 2, 3
-    // Origen 2: [12, 18, 25] a Destinos 1, 2, 3
+  nextTick(() => {
     objectiveCoefficients.value = [10, 15, 20, 12, 18, 25]
-
-    // Restricciones de oferta y demanda
-    // Oferta Origen 1: 50 unidades
-    // Oferta Origen 2: 70 unidades
-    // Demanda Destino 1: 40 unidades
-    // Demanda Destino 2: 45 unidades
-    // Demanda Destino 3: 35 unidades
-    // Total Oferta = Total Demanda = 120 unidades (BALANCEADO)
-
     constraintCoefficients.value = [
-      [1, 1, 1, 0, 0, 0],  // Oferta origen 1: X11 + X12 + X13 = 50
-      [0, 0, 0, 1, 1, 1],  // Oferta origen 2: X21 + X22 + X23 = 70
-      [1, 0, 0, 1, 0, 0],  // Demanda destino 1: X11 + X21 = 40
-      [0, 1, 0, 0, 1, 0],  // Demanda destino 2: X12 + X22 = 45
-      [0, 0, 1, 0, 0, 1]   // Demanda destino 3: X13 + X23 = 35
+      [1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 1, 1, 1],
+      [1, 0, 0, 1, 0, 0],
+      [0, 1, 0, 0, 1, 0],
+      [0, 0, 1, 0, 0, 1]
     ]
     constraintRHS.value = [50, 70, 40, 45, 35]
     constraintTypes.value = ['=', '=', '=', '=', '=']
-  }, 0)
+  })
 }
 
 // NO cargar ejemplo automáticamente, empezar con valores en cero
 initializeMatrices()
 
 const validateInputs = () => {
-  console.log('Validando inputs...')
-  console.log('objectiveCoefficients:', objectiveCoefficients.value)
-  console.log('constraintCoefficients:', constraintCoefficients.value)
-  console.log('constraintRHS:', constraintRHS.value)
-
   for (let i = 0; i < numVariables.value; i++) {
     const coef = objectiveCoefficients.value[i]
     if (coef === '' || coef === null || coef === undefined) {
-      console.log(`Error en coeficiente ${i}: está vacío`)
       return 'Por favor, complete todos los coeficientes de la función objetivo'
     }
     if (isNaN(coef) || !isFinite(coef)) {
-      console.log(`Error en coeficiente ${i}: no es un número válido`)
       return 'Los coeficientes de la función objetivo deben ser números válidos'
     }
   }
@@ -190,20 +171,14 @@ const convertirATransporte = () => {
 }
 
 const compareAllMethods = () => {
-  console.log('=== COMPARAR TODOS LOS MÉTODOS ===')
-  console.log('BOTÓN FUNCIONÓ - La función se está ejecutando')
-
   const errorMsg = validateInputs()
-  console.log('Error de validación:', errorMsg)
 
   if (errorMsg) {
     alert(errorMsg)
-    console.log('Mostrando alerta de error')
     return
   }
 
   solutionResults.value = {}
-  console.log('Iniciando comparación...')
 
   const problemData = {
     type: problemType.value,
@@ -215,17 +190,11 @@ const compareAllMethods = () => {
     constraintTypes: constraintTypes.value
   }
 
-  console.log('Datos del problema:', problemData)
-  console.log('¿Puede usar método gráfico?', canUseGraphicMethod.value)
-  console.log('¿Es problema de transporte?', esProblemaTransporte.value)
-
   // Método Gráfico (solo si hay 2 variables)
   if (canUseGraphicMethod.value) {
     try {
       const solver = new GraphicMethodSolver(problemData)
       const resultado = solver.solve()
-
-      console.log('Resultado Gráfico:', resultado)
 
       if (resultado.status === 'optimal' && resultado.optimalPoint) {
         const variables = [resultado.optimalPoint.x, resultado.optimalPoint.y]
@@ -244,7 +213,6 @@ const compareAllMethods = () => {
         }
       }
     } catch (error) {
-      console.error('Error en Gráfico:', error)
       solutionResults.value.grafico = { error: 'No se pudo resolver con el método gráfico' }
     }
   }
@@ -253,8 +221,6 @@ const compareAllMethods = () => {
   try {
     const solver = new SimplexSolver(problemData)
     const resultado = solver.solve()
-
-    console.log('Resultado Simplex:', resultado)
 
     if (resultado.status === 'optimal' && resultado.solution) {
       solutionResults.value.simplex = {
@@ -271,7 +237,6 @@ const compareAllMethods = () => {
       }
     }
   } catch (error) {
-    console.error('Error en Simplex:', error)
     solutionResults.value.simplex = { error: 'No se pudo resolver con el método simplex' }
   }
 
@@ -328,23 +293,16 @@ const compareAllMethods = () => {
         solutionResults.value.mejorTransporte = mejorMetodo.nombre
 
       } catch (error) {
-        console.error('Error al resolver con métodos de transporte:', error)
         solutionResults.value.esquinaNoroeste = { error: 'Error al calcular', factible: false }
         solutionResults.value.costoMinimo = { error: 'Error al calcular', factible: false }
         solutionResults.value.vogel = { error: 'Error al calcular', factible: false }
       }
     } else {
-      console.warn('No se pudo convertir a formato de transporte')
     }
   }
 
-  console.log('Soluciones calculadas:', solutionResults.value)
-
-  // Ejecutar validación cruzada
   performCrossValidation()
-
   showSolutions.value = true
-  console.log('Mostrando resultados...')
 }
 
 // Estado de validación cruzada
@@ -469,8 +427,6 @@ const performCrossValidation = () => {
   // Ejecutar validaciones
   validationResults.value.linealConvergence = validateLinearConvergence()
   validationResults.value.transportComparison = validateTransportMethods()
-
-  console.log('Validación cruzada completada:', validationResults.value)
 }
 
 const resetComparison = () => {
@@ -494,8 +450,14 @@ const isBestSolution = (method) => {
   if (solutionResults.value.simplex && !solutionResults.value.simplex.error) {
     values.push(solutionResults.value.simplex.z)
   }
-  if (solutionResults.value.transporte && !solutionResults.value.transporte.error) {
-    values.push(solutionResults.value.transporte.z)
+  if (solutionResults.value.esquinaNoroeste && !solutionResults.value.esquinaNoroeste.error) {
+    values.push(solutionResults.value.esquinaNoroeste.z)
+  }
+  if (solutionResults.value.costoMinimo && !solutionResults.value.costoMinimo.error) {
+    values.push(solutionResults.value.costoMinimo.z)
+  }
+  if (solutionResults.value.vogel && !solutionResults.value.vogel.error) {
+    values.push(solutionResults.value.vogel.z)
   }
 
   if (values.length === 0) return false

@@ -1,33 +1,58 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { SimplexSolver } from '../utils/simplex.js'
 import { GraphicMethodSolver } from '../utils/grafico.js'
 import { formatNumber } from '../utils/formatters.js'
 import SimplexTable from './SimplexTable.vue'
 
+// ===== PROPS Y EMITS =====
 const props = defineProps({
-  problemData: Object
+  problemData: { type: Object, required: true }
 })
 
 const emit = defineEmits(['reset'])
 
-const results = ref({
-  simplex: null,
-  grafico: null
-})
-
+// ===== ESTADO REACTIVO =====
+const results = ref({ simplex: null, grafico: null })
 const selectedMethod = ref(null)
 
-onMounted(() => {
-  solveProblem()
+// ===== COMPUTED PROPERTIES =====
+const result = computed(() => {
+  if (!selectedMethod.value) return results.value.simplex
+  if (selectedMethod.value === 'todos') return results.value.simplex
+  return results.value[selectedMethod.value] || results.value.simplex
 })
 
+const hasGraphicSolution = computed(() => results.value.grafico !== null && results.value.grafico !== undefined)
+
+const optimalValue = computed(() => {
+  if (!result.value) return null
+  return formatNumber(result.value.optimalValue || 0)
+})
+
+const solutionVariables = computed(() => {
+  if (!result.value?.solution) return []
+  return result.value.solution.map((val, idx) => ({
+    name: `X${idx + 1}`,
+    value: formatNumber(val)
+  }))
+})
+
+const methodLabel = computed(() => {
+  const labels = {
+    simplex: 'Método Simplex',
+    grafico: 'Método Gráfico',
+    todos: 'Comparación de Métodos'
+  }
+  return labels[selectedMethod.value] || 'Solución'
+})
+
+// ===== FUNCIONES =====
 const solveProblem = () => {
   const method = props.problemData.method || 'simplex'
   selectedMethod.value = method
 
   if (method === 'todos') {
-    // Resolver con todos los métodos aplicables
     solveWithAllMethods()
   } else if (method === 'simplex') {
     const solver = new SimplexSolver(props.problemData)
@@ -39,32 +64,27 @@ const solveProblem = () => {
 }
 
 const solveWithAllMethods = () => {
-  // Siempre resolver con Simplex
   const simplexSolver = new SimplexSolver(props.problemData)
   results.value.simplex = simplexSolver.solve()
 
-  // Intentar método gráfico si hay 2 variables
   if (props.problemData.numVariables === 2) {
     const graficoSolver = new GraphicMethodSolver(props.problemData)
     results.value.grafico = graficoSolver.solve()
   }
 }
 
-// Computed para obtener el resultado actual para mantener compatibilidad con template existente
-const result = computed(() => {
-  if (!selectedMethod.value) {
-    return results.value.simplex
-  }
+const switchMethod = (method) => {
+  selectedMethod.value = method
+}
 
-  if (selectedMethod.value === 'todos') {
-    return results.value.simplex // Por defecto mostrar simplex en modo todos
-  } else if (selectedMethod.value === 'simplex') {
-    return results.value.simplex
-  } else if (selectedMethod.value === 'grafico') {
-    return results.value.grafico
-  }
+// ===== WATCHERS =====
+watch(() => props.problemData, () => {
+  solveProblem()
+}, { deep: true })
 
-  return results.value.simplex
+// ===== CICLO DE VIDA =====
+onMounted(() => {
+  solveProblem()
 })
 
 const exportToText = () => {

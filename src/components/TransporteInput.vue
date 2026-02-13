@@ -1,48 +1,52 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TransporteSolver from '../utils/transporte.js'
 import MethodExplanation from './MethodExplanation.vue'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
+// ===== EMITS =====
 const emit = defineEmits(['solve'])
 
-// Datos del problema
+// ===== ESTADO REACTIVO =====
 const numOrigenes = ref(3)
 const numDestinos = ref(3)
-
-// Matrices de costos
 const costos = ref([
   [4, 8, 8],
   [16, 24, 16],
   [8, 16, 24]
 ])
-
-// Oferta y demanda
 const oferta = ref([76, 82, 77])
 const demanda = ref([72, 102, 41])
-
-// Método seleccionado
 const metodoSeleccionado = ref('todos')
-
-// Soluciones
 const soluciones = ref(null)
 const mostrarSoluciones = ref(false)
-
-// Control de visibilidad de pasos detallados
 const mostrarPasosEsquina = ref(false)
 const mostrarPasosCosto = ref(false)
 const mostrarPasosVogel = ref(false)
-
-// Control de pestañas: 'calculadora', 'teoria', 'pasoapaso'
 const activeTab = ref('calculadora')
 
-// Actualizar tamaños de matrices cuando cambian las dimensiones
+// ===== COMPUTED PROPERTIES =====
+const esValido = computed(() => {
+  const sumaOferta = oferta.value.reduce((a, b) => a + b, 0)
+  const sumaDemanda = demanda.value.reduce((a, b) => a + b, 0)
+  return sumaOferta === sumaDemanda && costos.value.every(row => row.every(c => !isNaN(c)))
+})
+
+const mensajeValidacion = computed(() => {
+  const sumaOferta = oferta.value.reduce((a, b) => a + b, 0)
+  const sumaDemanda = demanda.value.reduce((a, b) => a + b, 0)
+  if (sumaOferta !== sumaDemanda) {
+    return `Oferta (${sumaOferta}) debe igual Demanda (${sumaDemanda})`
+  }
+  return null
+})
+
+// ===== FUNCIONES =====
 const actualizarTamanos = () => {
   const m = numOrigenes.value
   const n = numDestinos.value
 
-  // Ajustar matriz de costos
   const nuevosCostos = []
   for (let i = 0; i < m; i++) {
     nuevosCostos[i] = []
@@ -79,63 +83,36 @@ const totalDemanda = computed(() => demanda.value.reduce((sum, val) => sum + val
 
 // Resolver problema
 const resolver = () => {
-  console.log('=== INICIO RESOLVER ===')
-  console.log('Método seleccionado:', metodoSeleccionado.value)
-  console.log('Balance:', esBalanceado.value)
-  console.log('Costos:', costos.value)
-  console.log('Oferta:', oferta.value)
-  console.log('Demanda:', demanda.value)
-
   if (!esBalanceado.value) {
     alert('El problema no está balanceado. La oferta total debe ser igual a la demanda total.')
     return
   }
 
   try {
-    console.log('Creando TransporteSolver...')
     const solver = new TransporteSolver({
       costos: costos.value,
       oferta: oferta.value,
       demanda: demanda.value
     })
-    console.log('TransporteSolver creado:', solver)
 
     if (metodoSeleccionado.value === 'todos') {
-      console.log('Ejecutando resolver todos...')
-      const resultado = solver.resolverTodos(costos.value, oferta.value, demanda.value)
-      console.log('Resultado de resolverTodos:', resultado)
-      soluciones.value = resultado
+      soluciones.value = solver.resolverTodos(costos.value, oferta.value, demanda.value)
     } else if (metodoSeleccionado.value === 'esquina') {
-      console.log('Ejecutando esquina noroeste...')
       soluciones.value = {
         esquinaNoroeste: solver.esquinaNoroeste(costos.value, oferta.value, demanda.value)
       }
     } else if (metodoSeleccionado.value === 'costo') {
-      console.log('Ejecutando costo mínimo...')
       soluciones.value = {
         costoMinimo: solver.costoMinimo(costos.value, oferta.value, demanda.value)
       }
     } else if (metodoSeleccionado.value === 'vogel') {
-      console.log('Ejecutando Vogel...')
       soluciones.value = {
         vogel: solver.aproximacionVogel(costos.value, oferta.value, demanda.value)
       }
     }
 
-    console.log('Soluciones asignadas:', soluciones.value)
-    console.log('Verificando estructura:')
-    console.log('- esquinaNoroeste?', !!soluciones.value?.esquinaNoroeste)
-    console.log('- costoMinimo?', !!soluciones.value?.costoMinimo)
-    console.log('- vogel?', !!soluciones.value?.vogel)
-
-    console.log('Estableciendo mostrarSoluciones = true')
     mostrarSoluciones.value = true
-    console.log('mostrarSoluciones ahora es:', mostrarSoluciones.value)
-    console.log('=== FIN RESOLVER ===')
   } catch (error) {
-    console.error('=== ERROR EN RESOLVER ===')
-    console.error('Error completo:', error)
-    console.error('Stack trace:', error.stack)
     alert('Error al resolver el problema: ' + error.message)
   }
 }

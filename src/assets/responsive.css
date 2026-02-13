@@ -7,12 +7,15 @@
 /* Variables de diseño para ritmo y cards */
 :root {
   --card-vertical-gap-desktop: 2rem;
-  --card-vertical-gap-tablet: 1.25rem;
-  --card-vertical-gap-mobile: 1rem;
-  --card-padding-desktop: 1.25rem 1.5rem;
-  --card-padding-mobile: 0.75rem 0.75rem;
-  --card-shadow: 0 4px 12px rgba(14,165,233,0.08);
-  --card-border: 2px solid #e2e8f0;
+  --card-vertical-gap-tablet: 1.5rem;
+  --card-vertical-gap-mobile: 1.25rem;
+  --card-padding-desktop: 1.5rem 1.75rem;
+  --card-padding-tablet: 1.125rem 1.25rem;
+  --card-padding-mobile: 1rem 1rem;
+  --card-shadow: 0 4px 12px rgba(59, 130, 246, 0.10);
+  --card-shadow-hover: 0 8px 20px rgba(59, 130, 246, 0.15);
+  --card-border: 1px solid rgba(226, 232, 240, 0.6);
+  --card-border-radius: 10px;
   --card-max-width: 720px;
   --card-vertical-gap: var(--card-vertical-gap-desktop);
   --card-padding: var(--card-padding-desktop);
@@ -21,6 +24,7 @@
 @media (max-width: 1024px) {
   :root {
     --card-vertical-gap: var(--card-vertical-gap-tablet);
+    --card-padding: var(--card-padding-tablet);
   }
 }
 

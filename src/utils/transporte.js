@@ -16,6 +16,16 @@ export class TransporteSolver {
     this.status = null
   }
 
+  calcularCostoTotal(asignacion, costos) {
+    let total = 0
+    for (let i = 0; i < asignacion.length; i++) {
+      for (let j = 0; j < asignacion[i].length; j++) {
+        total += asignacion[i][j] * costos[i][j]
+      }
+    }
+    return total
+  }
+
   /**
    * Formatea un número para mostrar
    */
@@ -79,13 +89,7 @@ export class TransporteSolver {
       }
     }
 
-    // Calcular costo total
-    let costoTotal = 0
-    for (let i = 0; i < m; i++) {
-      for (let j = 0; j < n; j++) {
-        costoTotal += asignacion[i][j] * costos[i][j]
-      }
-    }
+    const costoTotal = this.calcularCostoTotal(asignacion, costos)
 
     return {
       metodo: 'Esquina Noroeste',
@@ -154,13 +158,7 @@ export class TransporteSolver {
       demandaRestante[j] -= cantidad
     }
 
-    // Calcular costo total
-    let costoTotal = 0
-    for (let i = 0; i < m; i++) {
-      for (let j = 0; j < n; j++) {
-        costoTotal += asignacion[i][j] * costos[i][j]
-      }
-    }
+    const costoTotal = this.calcularCostoTotal(asignacion, costos)
 
     return {
       metodo: 'Costo Mínimo',
@@ -323,13 +321,7 @@ export class TransporteSolver {
       }
     }
 
-    // Calcular costo total
-    let costoTotal = 0
-    for (let i = 0; i < m; i++) {
-      for (let j = 0; j < n; j++) {
-        costoTotal += asignacion[i][j] * costos[i][j]
-      }
-    }
+    const costoTotal = this.calcularCostoTotal(asignacion, costos)
 
     return {
       metodo: 'Aproximación de Vogel (VAM)',

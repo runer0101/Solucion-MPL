@@ -1,291 +1,121 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed, nextTick } from 'vue'
 import MethodExplanation from './MethodExplanation.vue'
+import { SIMPLEX_EXAMPLES } from '../data/examples.js'
 
+// ===== MODELOS (two-way binding con el padre) =====
+const numVariables = defineModel('numVariables', { type: Number, required: true })
+const numConstraints = defineModel('numConstraints', { type: Number, required: true })
+const problemType = defineModel('problemType', { type: String, required: true })
+
+// ===== PROPS Y EMITS =====
 const props = defineProps({
-  numVariables: Number,
-  numConstraints: Number,
-  problemType: String,
-  selectedMethod: {
-    type: String,
-    default: 'todos'
-  }
+  selectedMethod: { type: String, default: 'todos' }
 })
 
-const emit = defineEmits(['solve', 'update:numVariables', 'update:numConstraints', 'update:problemType'])
+const emit = defineEmits(['solve'])
 
-// Variables locales (copias de las props para edición)
-const localNumVariables = ref(props.numVariables)
-const localNumConstraints = ref(props.numConstraints)
-const localProblemType = ref(props.problemType)
-
-// Método de solución seleccionado (reactivo a cambios en la prop)
+// ===== ESTADO REACTIVO =====
 const selectedMethod = ref(props.selectedMethod)
-
-// Control de pestañas: 'calculadora', 'teoria', 'pasoapaso'
 const activeTab = ref('calculadora')
-
-// Observar cambios en la prop selectedMethod para actualizar el valor local
-watch(() => props.selectedMethod, (newMethod) => {
-  selectedMethod.value = newMethod
-})
-
-// Matrices para almacenar los datos del problema
-const objectiveCoefficients = ref([])        // Coeficientes de la función objetivo
-const constraintCoefficients = ref([])       // Coeficientes de las restricciones (matriz)
-const constraintRHS = ref([])                // Lados derechos de las restricciones
-const constraintTypes = ref([])              // Tipos de restricciones (≤, ≥, =)
-
-/**
- * Inicializa o reinicia las matrices de datos cuando cambia
- * el número de variables o restricciones
- */
-const initializeMatrices = () => {
-  // Array para función objetivo: [c₁, c₂, ..., cₙ]
-  objectiveCoefficients.value = Array(localNumVariables.value).fill(0)
-
-  // Matriz de coeficientes de restricciones: [[a₁₁, a₁₂], [a₂₁, a₂₂], ...]
-  constraintCoefficients.value = Array(localNumConstraints.value).fill(null).map(() =>
-    Array(localNumVariables.value).fill(0)
-  )
-
-  // Lados derechos: [b₁, b₂, ..., bₘ]
-  constraintRHS.value = Array(localNumConstraints.value).fill(0)
-
-  // Tipos de restricciones: ['≤', '≤', '≥', ...]
-  constraintTypes.value = Array(localNumConstraints.value).fill('≤')
-}
-
-// Inicializar al cargar el componente
-initializeMatrices()
-
-// Reinicializar cuando cambian las dimensiones del problema
-watch([localNumVariables, localNumConstraints], () => {
-  initializeMatrices()
-})
-
-/**
- * Carga un ejemplo predefinido de problema de programación lineal
- *
- * Ejemplos disponibles:
- * 1. Problema simple (2 variables, 2 restricciones)
- * 2. Problema de producción (2 variables, 3 restricciones)
- * 3. Problema con 3 variables (3 variables, 2 restricciones)
- *
- * @param {number} numeroDeEjemplo - Número del ejemplo a cargar (1, 2, o 3)
- */
-const loadExample = (numeroDeEjemplo = 1) => {
-  if (numeroDeEjemplo === 1) {
-    // Ejemplo 1: Problema simple de maximización
-    // Max Z = 3X₁ + 5X₂
-    // s.a: X₁ ≤ 4
-    //      2X₂ ≤ 12
-    localNumVariables.value = 2
-    localNumConstraints.value = 2
-    localProblemType.value = 'max'
-
-    emit('update:numVariables', 2)
-    emit('update:numConstraints', 2)
-    emit('update:problemType', 'max')
-
-    setTimeout(() => {
-      objectiveCoefficients.value = [3, 5]
-      constraintCoefficients.value = [
-        [1, 0],
-        [0, 2]
-      ]
-      constraintRHS.value = [4, 12]
-      constraintTypes.value = ['≤', '≤']
-    }, 0)
-  } else if (numeroDeEjemplo === 2) {
-    // Ejemplo 2: Problema de producción
-    // Max Z = 40X₁ + 30X₂ (utilidad por producto)
-    // s.a: X₁ + X₂ ≤ 12    (horas disponibles)
-    //      2X₁ + X₂ ≤ 16   (material A)
-    //      X₁ + 2X₂ ≤ 15   (material B)
-    localNumVariables.value = 2
-    localNumConstraints.value = 3
-    localProblemType.value = 'max'
-
-    emit('update:numVariables', 2)
-    emit('update:numConstraints', 3)
-    emit('update:problemType', 'max')
-
-    setTimeout(() => {
-      objectiveCoefficients.value = [40, 30]
-      constraintCoefficients.value = [
-        [1, 1],
-        [2, 1],
-        [1, 2]
-      ]
-      constraintRHS.value = [12, 16, 15]
-      constraintTypes.value = ['≤', '≤', '≤']
-    }, 0)
-  } else if (numeroDeEjemplo === 3) {
-    // Ejemplo 3: Problema con 3 variables
-    // Max Z = 2X₁ + 3X₂ + 4X₃
-    // s.a: 3X₁ + 2X₂ + X₃ ≤ 10
-    //      2X₁ + 5X₂ + 3X₃ ≤ 15
-    localNumVariables.value = 3
-    localNumConstraints.value = 2
-    localProblemType.value = 'max'
-
-    emit('update:numVariables', 3)
-    emit('update:numConstraints', 2)
-    emit('update:problemType', 'max')
-
-    setTimeout(() => {
-      objectiveCoefficients.value = [2, 3, 4]
-      constraintCoefficients.value = [
-        [3, 2, 1],
-        [2, 5, 3]
-      ]
-      constraintRHS.value = [10, 15]
-      constraintTypes.value = ['≤', '≤']
-    }, 0)
-  } else if (numeroDeEjemplo === 4) {
-    // Ejemplo 4: Problema con restricciones mixtas para probar Penalización
-    // Max Z = 3X₁ + 2X₂ + 5X₃
-    // s.a: X₁ + 2X₂ + X₃ ≤ 430
-    //      3X₁ + 2X₃ ≥ 460
-    //      X₁ + 4X₂ = 120
-    localNumVariables.value = 3
-    localNumConstraints.value = 3
-    localProblemType.value = 'max'
-
-    emit('update:numVariables', 3)
-    emit('update:numConstraints', 3)
-    emit('update:problemType', 'max')
-
-    setTimeout(() => {
-      objectiveCoefficients.value = [3, 2, 5]
-      constraintCoefficients.value = [
-        [1, 2, 1],
-        [3, 0, 2],
-        [1, 4, 0]
-      ]
-      constraintRHS.value = [430, 460, 120]
-      constraintTypes.value = ['≤', '≥', '=']
-    }, 0)
-  }
-}
-
-// Controla la visibilidad del panel de ejemplos
 const showExamples = ref(false)
 
-/**
- * Valida que todos los campos del formulario estén completos
- *
- * Verifica:
- * - Todos los coeficientes de la función objetivo estén llenos
- * - Todos los coeficientes de restricciones estén llenos
- * - Todos los lados derechos estén llenos
- * - Valores numéricos válidos
- * - Restricciones con sentido lógico
- *
- * @returns {string|null} - Mensaje de error si hay validación fallida, null si todo está bien
- */
-const validateInputs = () => {
-  // Verificar coeficientes de la función objetivo
-  for (let indiceVariable = 0; indiceVariable < localNumVariables.value; indiceVariable++) {
-    const coef = objectiveCoefficients.value[indiceVariable]
-    if (coef === '' || coef === null || coef === undefined) {
-      return 'Por favor, complete todos los coeficientes de la función objetivo';
-    }
-    if (isNaN(coef) || !isFinite(coef)) {
-      return 'Los coeficientes de la función objetivo deben ser números válidos';
-    }
-  }
+const objectiveCoefficients = ref([])
+const constraintCoefficients = ref([])
+const constraintRHS = ref([])
+const constraintTypes = ref([])
 
-  // Verificar coeficientes de restricciones
-  for (let indiceRestriccion = 0; indiceRestriccion < localNumConstraints.value; indiceRestriccion++) {
-    for (let indiceVariable = 0; indiceVariable < localNumVariables.value; indiceVariable++) {
-      const coeficiente = constraintCoefficients.value[indiceRestriccion][indiceVariable]
-      if (coeficiente === '' || coeficiente === null || coeficiente === undefined) {
-        return `Por favor, complete todos los coeficientes de la restricción ${indiceRestriccion + 1}`;
-      }
-      if (isNaN(coeficiente) || !isFinite(coeficiente)) {
-        return `Los coeficientes de la restricción ${indiceRestriccion + 1} deben ser números válidos`;
-      }
-    }
+// ===== COMPUTED PROPERTIES =====
+const isFormValid = computed(() => {
+  return objectiveCoefficients.value.every(c => c !== '' && !isNaN(c)) &&
+         constraintCoefficients.value.every(row =>
+           row.every(c => c !== '' && !isNaN(c))
+         ) &&
+         constraintRHS.value.every(c => c !== '' && !isNaN(c))
+})
 
-    // Verificar lado derecho de cada restricción
-    const rhs = constraintRHS.value[indiceRestriccion]
-    if (rhs === '' || rhs === null || rhs === undefined) {
-      return `Por favor, complete el lado derecho de la restricción ${indiceRestriccion + 1}`;
-    }
-    if (isNaN(rhs) || !isFinite(rhs)) {
-      return `El lado derecho de la restricción ${indiceRestriccion + 1} debe ser un número válido`;
-    }
-    if (rhs < 0) {
-      return `El lado derecho de la restricción ${indiceRestriccion + 1} debe ser no negativo`;
-    }
-  }
+const problemDimensions = computed(() =>
+  `${numVariables.value} variables × ${numConstraints.value} restricciones`
+)
 
-  // Todo está completo
-  return null;
+// ===== FUNCIONES =====
+const initializeMatrices = () => {
+  objectiveCoefficients.value = Array(numVariables.value).fill(0)
+  constraintCoefficients.value = Array(numConstraints.value)
+    .fill(null)
+    .map(() => Array(numVariables.value).fill(0))
+  constraintRHS.value = Array(numConstraints.value).fill(0)
+  constraintTypes.value = Array(numConstraints.value).fill('≤')
 }
 
-/**
- * Maneja el evento de resolver el problema
- *
- * 1. Valida que todos los campos estén completos
- * 2. Convierte todos los valores a números
- * 3. Emite el evento 'solve' con los datos del problema
- */
+const validateInputs = () => {
+  for (let i = 0; i < numVariables.value; i++) {
+    const coef = objectiveCoefficients.value[i]
+    if (coef === '' || coef === null || isNaN(coef)) {
+      return `Coeficiente ${i + 1} de función objetivo inválido`
+    }
+  }
+
+  for (let i = 0; i < numConstraints.value; i++) {
+    for (let j = 0; j < numVariables.value; j++) {
+      const coef = constraintCoefficients.value[i][j]
+      if (coef === '' || coef === null || isNaN(coef)) {
+        return `Restricción ${i + 1}, variable ${j + 1} inválida`
+      }
+    }
+    if (!constraintRHS.value[i] || isNaN(constraintRHS.value[i])) {
+      return `Restricción ${i + 1}, lado derecho inválido`
+    }
+  }
+  return null
+}
+
 const handleSolve = () => {
-  // Validar entradas
-  const mensajeDeError = validateInputs()
-  if (mensajeDeError) {
-    alert(mensajeDeError)
+  const error = validateInputs()
+  if (error) {
+    alert(`Error: ${error}`)
     return
   }
 
-  // Preparar datos del problema
-  const datosDelProblema = {
-    type: localProblemType.value,
-    numVariables: localNumVariables.value,
-    numConstraints: localNumConstraints.value,
+  emit('solve', {
+    type: problemType.value,
+    numVariables: numVariables.value,
+    numConstraints: numConstraints.value,
     objective: objectiveCoefficients.value.map(Number),
-    constraints: constraintCoefficients.value.map(fila => fila.map(Number)),
+    constraints: constraintCoefficients.value.map(row => row.map(Number)),
     rhs: constraintRHS.value.map(Number),
     constraintTypes: constraintTypes.value,
-    method: selectedMethod.value // Agregar método seleccionado
-  }
-
-  // Emitir evento para que el componente padre resuelva el problema
-  emit('solve', datosDelProblema)
+    method: selectedMethod.value
+  })
 }
 
-/**
- * Actualiza el número de variables y notifica al componente padre
- */
-const updateNumVariables = (evento) => {
-  const nuevoValor = parseInt(evento.target.value)
-  if (nuevoValor >= 1 && nuevoValor <= 10) {
-    localNumVariables.value = nuevoValor
-    emit('update:numVariables', nuevoValor)
-  }
+const loadExample = (exampleNum = 1) => {
+  const example = SIMPLEX_EXAMPLES[exampleNum]
+  if (!example) return
+
+  numVariables.value = example.vars
+  numConstraints.value = example.constraints.length
+  problemType.value = example.type
+
+  nextTick(() => {
+    objectiveCoefficients.value = [...example.objective]
+    constraintCoefficients.value = example.constraints.map(row => [...row])
+    constraintRHS.value = [...example.rhs]
+    constraintTypes.value = [...example.types]
+  })
 }
 
-/**
- * Actualiza el número de restricciones y notifica al componente padre
- */
-const updateNumConstraints = (evento) => {
-  const nuevoValor = parseInt(evento.target.value)
-  if (nuevoValor >= 1 && nuevoValor <= 10) {
-    localNumConstraints.value = nuevoValor
-    emit('update:numConstraints', nuevoValor)
-  }
-}
+// ===== WATCHERS =====
+watch(() => props.selectedMethod, (newVal) => {
+  selectedMethod.value = newVal
+})
 
-/**
- * Actualiza el tipo de problema (maximizar/minimizar) y notifica al componente padre
- */
-const updateProblemType = (evento) => {
-  localProblemType.value = evento.target.value
-  emit('update:problemType', evento.target.value)
-}
+watch([numVariables, numConstraints], () => {
+  initializeMatrices()
+})
+
+// ===== INICIALIZACIÓN =====
+initializeMatrices()
 </script>
 
 <template>
@@ -402,8 +232,7 @@ const updateProblemType = (evento) => {
           <input
             id="num-vars"
             type="number"
-            :value="localNumVariables"
-            @input="updateNumVariables"
+            v-model.number="numVariables"
             min="1"
             max="10"
             class="form-input"
@@ -416,8 +245,7 @@ const updateProblemType = (evento) => {
           <input
             id="num-constraints"
             type="number"
-            :value="localNumConstraints"
-            @input="updateNumConstraints"
+            v-model.number="numConstraints"
             min="1"
             max="10"
             class="form-input"
@@ -439,8 +267,7 @@ const updateProblemType = (evento) => {
         <label for="problem-type">Tipo de Problema:</label>
         <select
           id="problem-type"
-          :value="localProblemType"
-          @change="updateProblemType"
+          v-model="problemType"
           class="form-select"
         >
           <option value="max">Maximizar</option>
@@ -449,7 +276,7 @@ const updateProblemType = (evento) => {
       </div>
 
       <div class="objective-function">
-        <span class="function-label">{{ localProblemType === 'max' ? 'Maximizar' : 'Minimizar' }} Z =</span>
+        <span class="function-label">{{ problemType === 'max' ? 'Maximizar' : 'Minimizar' }} Z =</span>
         <div class="coefficients-row">
           <template v-for="(coef, index) in objectiveCoefficients" :key="'obj-' + index">
             <input
@@ -473,25 +300,15 @@ const updateProblemType = (evento) => {
         </button>
 
         <div v-if="showExamples" class="examples-grid">
-          <div class="example-card" @click="loadExample(1)">
-            <h4>Ejemplo 1: Básico</h4>
-            <p>Max Z = 3X₁ + 5X₂</p>
-            <small>2 variables, 2 restricciones</small>
-          </div>
-          <div class="example-card" @click="loadExample(2)">
-            <h4>Ejemplo 2: Producción</h4>
-            <p>Max Z = 40X₁ + 30X₂</p>
-            <small>2 variables, 3 restricciones</small>
-          </div>
-          <div class="example-card" @click="loadExample(3)">
-            <h4>Ejemplo 3: Tres Variables</h4>
-            <p>Max Z = 2X₁ + 3X₂ + 4X₃</p>
-            <small>3 variables, 2 restricciones</small>
-          </div>
-          <div class="example-card" @click="loadExample(4)">
-            <h4>Ejemplo 4: Mixto</h4>
-            <p>Max Z = 3X₁ + 2X₂ + 5X₃</p>
-            <small>3 variables, 3 restricciones (≤, ≥, =)</small>
+          <div
+            v-for="(example, key) in SIMPLEX_EXAMPLES"
+            :key="key"
+            class="example-card"
+            @click="loadExample(Number(key))"
+          >
+            <h4>{{ example.label }}</h4>
+            <p>{{ example.description }}</p>
+            <small>{{ example.detail }}</small>
           </div>
         </div>
       </div>
@@ -560,7 +377,7 @@ const updateProblemType = (evento) => {
     </div>
 
     <div class="action-buttons">
-      <button @click="handleSolve" class="btn btn-secundary btn-solve-large">
+      <button @click="handleSolve" class="btn btn-secondary btn-solve-large">
         Resolver Problema
       </button>
     </div>
