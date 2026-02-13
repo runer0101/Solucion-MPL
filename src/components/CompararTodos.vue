@@ -599,10 +599,14 @@ const numMetodosDisponibles = computed(() => {
   <div class="comparar-todos">
     <!-- Formulario de entrada -->
     <div v-if="!showSolutions" class="input-section">
-      <div class="input-card">
+      <!-- Título -->
+      <div class="section-header-card">
         <h2 class="section-title">Comparación de Métodos</h2>
+      </div>
 
-        <!-- Configuración -->
+      <!-- Configuración -->
+      <div class="input-card">
+        <h3 class="card-title">Configuración del Problema</h3>
         <div class="config-section">
           <div class="config-grid">
             <div class="form-group">
@@ -658,164 +662,163 @@ const numMetodosDisponibles = computed(() => {
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Función Objetivo -->
-        <div class="objective-section">
-          <h3>Función Objetivo</h3>
-          <div class="section-with-explanation">
-            <div class="objective-function">
-              <span class="function-label">{{ problemType === 'max' ? 'Maximizar' : 'Minimizar' }} Z =</span>
-              <div class="coefficients-row">
-                <template v-for="(coef, index) in objectiveCoefficients" :key="'obj-' + index">
+      <!-- Función Objetivo -->
+      <div class="input-card">
+        <h3 class="card-title">Función Objetivo</h3>
+        <div class="section-with-explanation">
+          <div class="objective-function">
+            <span class="function-label">{{ problemType === 'max' ? 'Maximizar' : 'Minimizar' }} Z =</span>
+            <div class="coefficients-row">
+              <template v-for="(coef, index) in objectiveCoefficients" :key="'obj-' + index">
+                <input
+                  v-model.number="objectiveCoefficients[index]"
+                  type="number"
+                  step="any"
+                  class="coef-input"
+                  :placeholder="'c' + (index + 1)"
+                >
+                <span class="variable-label">X<sub>{{ index + 1 }}</sub></span>
+                <span v-if="index < objectiveCoefficients.length - 1" class="operator">+</span>
+              </template>
+            </div>
+          </div>
+          <div class="explanation-box">
+            <div class="explanation-row">
+              <strong>Simplex/Grafico:</strong>
+              <span>Coeficientes que multiplican cada variable. Ejemplo: 3X₁ + 5X₂, aqui 3 y 5 son los coeficientes</span>
+            </div>
+            <div class="explanation-row">
+              <strong>Transporte:</strong>
+              <span>Costo de enviar 1 unidad. Ejemplo: Si X₁=costo de Fabrica1 a Tienda1, X₂=costo de Fabrica1 a Tienda2. Los costos podrian ser 4 y 8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restricciones -->
+      <div class="input-card">
+        <h3 class="card-title">Restricciones</h3>
+        <div class="section-with-explanation">
+          <div class="constraints-list">
+            <div
+              v-for="(constraint, i) in constraintCoefficients"
+              :key="'constraint-' + i"
+              class="constraint-row"
+            >
+              <span class="constraint-number">{{ i + 1 }}.</span>
+              <div class="constraint-content">
+                <template v-for="(coef, j) in constraint" :key="'c-' + i + '-' + j">
                   <input
-                    v-model.number="objectiveCoefficients[index]"
+                    v-model.number="constraintCoefficients[i][j]"
                     type="number"
                     step="any"
-                    class="coef-input"
-                    :placeholder="'c' + (index + 1)"
+                    class="coef-input small"
+                    :placeholder="'a' + (i + 1) + (j + 1)"
                   >
-                  <span class="variable-label">X<sub>{{ index + 1 }}</sub></span>
-                  <span v-if="index < objectiveCoefficients.length - 1" class="operator">+</span>
+                  <span class="variable-label">X<sub>{{ j + 1 }}</sub></span>
+                  <span v-if="j < constraint.length - 1" class="operator">+</span>
                 </template>
-              </div>
-            </div>
-            <div class="explanation-box">
-              <div class="explanation-row">
-                <strong>Simplex/Grafico:</strong>
-                <span>Coeficientes que multiplican cada variable. Ejemplo: 3X₁ + 5X₂, aqui 3 y 5 son los coeficientes</span>
-              </div>
-              <div class="explanation-row">
-                <strong>Transporte:</strong>
-                <span>Costo de enviar 1 unidad. Ejemplo: Si X₁=costo de Fabrica1 a Tienda1, X₂=costo de Fabrica1 a Tienda2. Los costos podrian ser 4 y 8</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Restricciones -->
-        <div class="constraints-section">
-          <h3>Restricciones</h3>
-          <div class="section-with-explanation">
-            <div class="constraints-list">
-              <div
-                v-for="(constraint, i) in constraintCoefficients"
-                :key="'constraint-' + i"
-                class="constraint-row"
-              >
-                <span class="constraint-number">{{ i + 1 }}.</span>
-                <div class="constraint-content">
-                  <template v-for="(coef, j) in constraint" :key="'c-' + i + '-' + j">
-                    <input
-                      v-model.number="constraintCoefficients[i][j]"
-                      type="number"
-                      step="any"
-                      class="coef-input small"
-                      :placeholder="'a' + (i + 1) + (j + 1)"
-                    >
-                    <span class="variable-label">X<sub>{{ j + 1 }}</sub></span>
-                    <span v-if="j < constraint.length - 1" class="operator">+</span>
-                  </template>
+                <select v-model="constraintTypes[i]" class="constraint-type-select">
+                  <option value="≤">≤ (Menor o igual)</option>
+                  <option value="≥">≥ (Mayor o igual)</option>
+                  <option value="=">=  (Igual)</option>
+                </select>
 
-                  <select v-model="constraintTypes[i]" class="constraint-type-select">
-                    <option value="≤">≤ (Menor o igual)</option>
-                    <option value="≥">≥ (Mayor o igual)</option>
-                    <option value="=">=  (Igual)</option>
-                  </select>
-
-                  <input
-                    v-model.number="constraintRHS[i]"
-                    type="number"
-                    step="any"
-                    class="coef-input rhs"
-                    :placeholder="'b' + (i + 1)"
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="explanation-box">
-              <div class="explanation-row">
-                <strong>Simplex/Grafico:</strong>
-                <span>Limite de recursos. Ejemplo: X₁ + X₂ ≤ 100 significa "no puedes producir mas de 100 unidades en total"</span>
-              </div>
-              <div class="explanation-row">
-                <strong>Transporte:</strong>
-                <span>PRIMERAS restricciones: X₁ + X₂ = 50 (Fabrica1 tiene 50 unidades). ULTIMAS restricciones: X₁ + X₃ = 30 (Tienda1 necesita 30 unidades)</span>
+                <input
+                  v-model.number="constraintRHS[i]"
+                  type="number"
+                  step="any"
+                  class="coef-input rhs"
+                  :placeholder="'b' + (i + 1)"
+                >
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Vista previa en formato Transporte - SIEMPRE VISIBLE -->
-        <div class="transport-preview-section">
-          <h3>Asi seria en Metodo de Transporte:</h3>
-
-          <div class="transport-config">
-            <div class="form-group">
-              <label for="num-origenes">Numero de Origenes:</label>
-              <input
-                id="num-origenes"
-                v-model.number="numOrigenes"
-                type="number"
-                min="1"
-                max="10"
-                class="form-input"
-              >
+          <div class="explanation-box">
+            <div class="explanation-row">
+              <strong>Simplex/Grafico:</strong>
+              <span>Limite de recursos. Ejemplo: X₁ + X₂ ≤ 100 significa "no puedes producir mas de 100 unidades en total"</span>
             </div>
-            <div class="form-group">
-              <label for="num-destinos">Numero de Destinos:</label>
-              <input
-                id="num-destinos"
-                v-model.number="numDestinos"
-                type="number"
-                min="1"
-                max="10"
-                class="form-input"
-              >
+            <div class="explanation-row">
+              <strong>Transporte:</strong>
+              <span>PRIMERAS restricciones: X₁ + X₂ = 50 (Fabrica1 tiene 50 unidades). ULTIMAS restricciones: X₁ + X₃ = 30 (Tienda1 necesita 30 unidades)</span>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="transport-table-container">
-            <table class="transport-table">
-              <thead>
-                <tr>
-                  <th>Origen / Destino</th>
-                  <th v-for="j in numDestinos" :key="'dest-' + j">Destino {{ j }}</th>
-                  <th class="oferta-header">Oferta</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="i in numOrigenes" :key="'orig-' + i">
-                  <td class="origen-header"><strong>Origen {{ i }}</strong></td>
-                  <td v-for="j in numDestinos" :key="'cell-' + i + '-' + j" class="cost-cell">
-                    {{ objectiveCoefficients[(i-1) * numDestinos + (j-1)] || 0 }}
-                  </td>
-                  <td class="supply-cell">{{ constraintRHS[i-1] || 0 }}</td>
-                </tr>
-                <tr class="demand-row">
-                  <td class="demanda-header"><strong>Demanda</strong></td>
-                  <td v-for="j in numDestinos" :key="'demand-' + j" class="demand-cell">
-                    {{ constraintRHS[numOrigenes + j - 1] || 0 }}
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+      <!-- Vista previa en formato Transporte - SIEMPRE VISIBLE -->
+      <div class="transport-preview-section">
+        <h3>Asi seria en Metodo de Transporte:</h3>
+
+        <div class="transport-config">
+          <div class="form-group">
+            <label for="num-origenes">Numero de Origenes:</label>
+            <input
+              id="num-origenes"
+              v-model.number="numOrigenes"
+              type="number"
+              min="1"
+              max="10"
+              class="form-input"
+            >
+          </div>
+          <div class="form-group">
+            <label for="num-destinos">Numero de Destinos:</label>
+            <input
+              id="num-destinos"
+              v-model.number="numDestinos"
+              type="number"
+              min="1"
+              max="10"
+              class="form-input"
+            >
           </div>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="action-buttons">
-          <button @click="loadExample" class="btn btn-secondary btn-example">
-            Cargar Ejemplo Simple (Simplex + Gráfico)
-          </button>
-          <button @click="loadTransportExample" class="btn btn-secondary btn-example">
-            Cargar Ejemplo Transporte
-          </button>
-          <button @click="compareAllMethods" class="btn btn-primary btn-solve-main">
-            Resolver y Comparar Métodos
-          </button>
+        <div class="transport-table-container">
+          <table class="transport-table">
+            <thead>
+              <tr>
+                <th>Origen / Destino</th>
+                <th v-for="j in numDestinos" :key="'dest-' + j">Destino {{ j }}</th>
+                <th class="oferta-header">Oferta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="i in numOrigenes" :key="'orig-' + i">
+                <td class="origen-header"><strong>Origen {{ i }}</strong></td>
+                <td v-for="j in numDestinos" :key="'cell-' + i + '-' + j" class="cost-cell">
+                  {{ objectiveCoefficients[(i-1) * numDestinos + (j-1)] || 0 }}
+                </td>
+                <td class="supply-cell">{{ constraintRHS[i-1] || 0 }}</td>
+              </tr>
+              <tr class="demand-row">
+                <td class="demanda-header"><strong>Demanda</strong></td>
+                <td v-for="j in numDestinos" :key="'demand-' + j" class="demand-cell">
+                  {{ constraintRHS[numOrigenes + j - 1] || 0 }}
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <button @click="loadExample" class="btn btn-secondary btn-example">
+          Cargar Ejemplo Simple (Simplex + Gráfico)
+        </button>
+        <button @click="loadTransportExample" class="btn btn-secondary btn-example">
+          Cargar Ejemplo Transporte
+        </button>
+        <button @click="compareAllMethods" class="btn btn-primary btn-solve-main">
+          Resolver y Comparar Métodos
+        </button>
       </div>
     </div>
 
@@ -1014,6 +1017,9 @@ const numMetodosDisponibles = computed(() => {
 }
 
 .input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   animation: fadeIn 0.4s ease-in;
 }
 
@@ -1481,17 +1487,42 @@ const numMetodosDisponibles = computed(() => {
   }
 }
 
+.section-header-card {
+  text-align: center;
+  padding: 1.25rem 1.5rem;
+  background: #dfe9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .input-card {
   background: white;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.input-card:hover {
+  box-shadow: 0 8px 16px rgba(30, 64, 175, 0.2);
+  border-color: #3b82f6;
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #1e40af;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  color: #1e40af;
+  margin-bottom: 1.5rem;
   font-weight: 700;
 }
 
@@ -1505,7 +1536,6 @@ const numMetodosDisponibles = computed(() => {
   background: #f8fafc;
   padding: 1.5rem;
   border-radius: 8px;
-  margin-bottom: 2rem;
   border: 2px solid #e2e8f0;
 }
 

@@ -18,6 +18,8 @@ const startSolving = (method = 'todos') => {
   selectedMethod.value = method
   currentView.value = method
   showWelcome.value = false
+  showSolution.value = false
+  problemData.value = null
 }
 
 const goToMethod = (method) => {
@@ -58,92 +60,92 @@ const backToWelcome = () => {
         </div>
       </div>
     </header>
-
+ <!-- Pantalla de Bienvenida -->
     <main class="main-content">
-      <!-- Pantalla de Bienvenida -->
       <div v-if="showWelcome" class="welcome-section">
-        <div class="welcome-hero">
-          <h2 class="hero-title">Solucionador de Programación Lineal</h2>
-          <p class="hero-description">
-            Resuelve problemas de optimización con explicaciones detalladas paso a paso
-          </p>
-        </div>
-
+          <div class="welcome-hero">
+            <h2 class="hero-title">Solucionador de Programación Lineal</h2>
+            <p class="hero-description">
+              Resuelve problemas de optimización con explicaciones detalladas paso a paso
+            </p>
+          </div>
+    
         <!-- Métodos disponibles con botones directos -->
-        <div class="methods-showcase">
+     
+        <div class="methods-showcase-card">
           <h3 class="showcase-title">Selecciona un Método de Resolución</h3>
           <p class="showcase-subtitle">Haz clic en el método que deseas utilizar</p>
+        </div>
 
-          <div class="methods-grid-direct">
-            <!-- Método Simplex -->
-            <div class="method-card-direct">
-              <div class="method-header">
-                <h4>Método Simplex</h4>
-                <span class="badge badge-blue">Más usado</span>
-              </div>
-              <div class="method-info">
-                <p class="method-desc">Problemas estándar de optimización</p>
-                <ul class="method-specs">
-                  <li><strong>Variables:</strong> 2 o más</li>
-                  <li><strong>Restricciones:</strong> Tipo ≤</li>
-                  <li><strong>Nivel:</strong> <span class="difficulty medium">Medio</span></li>
-                </ul>
-              </div>
-              <button @click="startSolving('simplex')" class="btn-method btn-simplex">
-                Resolver con Simplex
-              </button>
+        <div class="methods-grid-direct">
+          <!-- Método Simplex -->
+          <div class="method-card-direct">
+            <div class="method-header">
+              <h4>Método Simplex</h4>
+              <span class="badge badge-blue">Más usado</span>
             </div>
-
-            <!-- Método Gráfico -->
-            <div class="method-card-direct">
-              <div class="method-header">
-                <h4>Método Gráfico</h4>
-                <span class="badge badge-pink">Visual</span>
-              </div>
-              <div class="method-info">
-                <p class="method-desc">Visualización geométrica de la solución</p>
-                <ul class="method-specs">
-                  <li><strong>Variables:</strong> Exactamente 2</li>
-                  <li><strong>Restricciones:</strong> Cualquier tipo</li>
-                  <li><strong>Nivel:</strong> <span class="difficulty easy">Fácil</span></li>
-                </ul>
-              </div>
-              <button @click="startSolving('grafico')" class="btn-method btn-graphic">
-                Resolver con Gráfico
-              </button>
+            <div class="method-info">
+              <p class="method-desc">Problemas estándar de optimización</p>
+              <ul class="method-specs">
+                <li><strong>Variables:</strong> 2 o más</li>
+                <li><strong>Restricciones:</strong> Tipo ≤</li>
+                <li><strong>Nivel:</strong> <span class="difficulty medium">Medio</span></li>
+              </ul>
             </div>
-
-            <!-- Métodos de Transporte -->
-            <div class="method-card-direct">
-              <div class="method-header">
-                <h4>Métodos de Transporte</h4>
-                <span class="badge badge-red">Especializado</span>
-              </div>
-              <div class="method-info">
-                <p class="method-desc">Soluciones iniciales para problemas de transporte</p>
-                <ul class="method-specs">
-                  <li><strong>Métodos:</strong> 3 algoritmos</li>
-                  <li><strong>Tipo:</strong> Esquina NW, Costo Mín, Vogel</li>
-                  <li><strong>Nivel:</strong> <span class="difficulty hard">Medio-Alto</span></li>
-                </ul>
-              </div>
-              <button @click="startSolving('penalizacion')" class="btn-method btn-penalty">
-                Resolver Transporte
-              </button>
-            </div>
+            <button @click="startSolving('simplex')" class="btn-method btn-simplex">
+              Resolver con Simplex
+            </button>
           </div>
 
-          <!-- Botón para comparar todos -->
-          <div class="compare-all-section">
-            <div class="compare-card">
-              <div class="compare-content">
-                <h4>¿No estás seguro cuál método usar?</h4>
-                <p>Compara los resultados de todos los métodos aplicables para tu problema</p>
-              </div>
-              <button @click="startSolving('todos')" class="btn-compare-all">
-                Comparar Todos los Métodos
-              </button>
+          <!-- Método Gráfico -->
+          <div class="method-card-direct">
+            <div class="method-header">
+              <h4>Método Gráfico</h4>
+              <span class="badge badge-pink">Visual</span>
             </div>
+            <div class="method-info">
+              <p class="method-desc">Visualización geométrica de la solución</p>
+              <ul class="method-specs">
+                <li><strong>Variables:</strong> Exactamente 2</li>
+                <li><strong>Restricciones:</strong> Cualquier tipo</li>
+                <li><strong>Nivel:</strong> <span class="difficulty easy">Fácil</span></li>
+              </ul>
+            </div>
+            <button @click="startSolving('grafico')" class="btn-method btn-graphic">
+              Resolver con Gráfico
+            </button>
+          </div>
+
+          <!-- Métodos de Transporte -->
+          <div class="method-card-direct">
+            <div class="method-header">
+              <h4>Métodos de Transporte</h4>
+              <span class="badge badge-red">Especializado</span>
+            </div>
+            <div class="method-info">
+              <p class="method-desc">Soluciones iniciales para problemas de transporte</p>
+              <ul class="method-specs">
+                <li><strong>Métodos:</strong> 3 algoritmos</li>
+                <li><strong>Tipo:</strong> Esquina NW, Costo Mín, Vogel</li>
+                <li><strong>Nivel:</strong> <span class="difficulty hard">Medio-Alto</span></li>
+              </ul>
+            </div>
+            <button @click="startSolving('penalizacion')" class="btn-method btn-penalty">
+              Resolver Transporte
+            </button>
+          </div>
+        </div>
+
+        <!-- Botón para comparar todos -->
+        <div class="compare-all-section">
+          <div class="compare-card">
+            <div class="compare-content">
+              <h4>¿No estás seguro cuál método usar?</h4>
+              <p>Compara los resultados de todos los métodos aplicables para tu problema</p>
+            </div>
+            <button @click="startSolving('todos')" class="btn-compare-all">
+              Comparar Todos los Métodos
+            </button>
           </div>
         </div>
 
@@ -197,7 +199,6 @@ const backToWelcome = () => {
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Navegación entre métodos -->
@@ -249,6 +250,7 @@ const backToWelcome = () => {
           <!-- Componente de Simplex/Gráfico -->
           <SimplexInput
             v-else
+            :key="currentView"
             :numVariables="numVariables"
             :numConstraints="numConstraints"
             :problemType="problemType"
@@ -496,23 +498,30 @@ body {
   line-height: 1.6;
 }
 
-.methods-showcase {
-  margin-bottom: 2.5rem;
+.methods-showcase-card {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #dfe9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .showcase-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #1e40af;
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .showcase-subtitle {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: #020202;
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
 }
 
 /* Grid de tarjetas de métodos */
@@ -529,7 +538,7 @@ body {
   padding: 1.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 2px solid #e2e8f0;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -537,7 +546,6 @@ body {
 .method-card-direct:hover {
   border-color: #3b82f6;
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
-  transform: translateY(-4px);
 }
 
 .method-header {
@@ -599,33 +607,32 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
 }
 
 .btn-simplex {
-  background: #1e40af;
+  background: #0284c7;
   color: white;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
 }
 
 .btn-simplex:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-  background: #1e3a8a;
+  background: #0269a1;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
 }
 
 .btn-graphic {
-  background: #3b82f6;
+  background: #0284c7;
   color: white;
-  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
 }
 
 .btn-graphic:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
-  background: #2563eb;
+  background: #0269a1;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
 }
+
 
 .btn-penalty {
   background: #0284c7;
@@ -634,9 +641,8 @@ body {
 }
 
 .btn-penalty:hover {
-  transform: translateY(-2px);
+  background: #0269a1;
   box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
-  background: #0369a1;
 }
 
 /* Sección de comparar todos */
@@ -708,7 +714,7 @@ body {
 }
 
 .badge-blue {
-  background: #1e40af;
+  background: #60a5fa;
   color: white;
 }
 
@@ -718,12 +724,12 @@ body {
 }
 
 .badge-red {
-  background: #0ea5e9;
+  background: #60a5fa;
   color: white;
 }
 
 .badge-green {
-  background: #3b82f6;
+  background: #60a5fa;
   color: white;
 }
 
@@ -865,14 +871,13 @@ body {
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   white-space: nowrap;
 }
 
 .method-tab:hover {
   border-color: #3b82f6;
   color: #3b82f6;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
@@ -1025,14 +1030,14 @@ body {
   background: #f8fafc;
   padding: 2rem;
   border-radius: 12px;
-  border-left: 4px solid #3b82f6;
+  border: 3.5px solid #3b82f6;
   transition: all 0.3s;
 }
 
 .theory-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
-  border-left-color: #2563eb;
+  border-color: #2563eb;
 }
 
 .theory-card h3 {

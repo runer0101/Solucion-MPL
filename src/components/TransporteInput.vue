@@ -942,7 +942,8 @@ const getMejorMetodo = () => {
 /* Sistema de Pestañas */
 .tabs-container {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
+  justify-content: center;
   background: white;
   padding: 1rem;
   border-radius: 12px;
@@ -951,7 +952,6 @@ const getMejorMetodo = () => {
 }
 
 .tab-btn {
-  flex: 1;
   padding: 1rem 2rem;
   border: 2px solid #e2e8f0;
   background: white;
@@ -960,13 +960,12 @@ const getMejorMetodo = () => {
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tab-btn:hover {
   border-color: #3b82f6;
   color: #3b82f6;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
@@ -1183,18 +1182,27 @@ const getMejorMetodo = () => {
 
 .section-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: #dfe9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #1e40af;
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .subtitle {
-  color: #666;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
+  color: #020202;
+  margin-bottom: 0;
 }
 
 .dimensions-config {

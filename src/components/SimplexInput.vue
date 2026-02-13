@@ -579,7 +579,8 @@ const updateProblemType = (evento) => {
 /* Sistema de Pestañas */
 .tabs-container {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
+  justify-content: center;
   background: white;
   padding: 1rem;
   border-radius: 12px;
@@ -588,7 +589,6 @@ const updateProblemType = (evento) => {
 }
 
 .tab-btn {
-  flex: 1;
   padding: 1rem 2rem;
   border: 2px solid #e2e8f0;
   background: white;
@@ -597,13 +597,12 @@ const updateProblemType = (evento) => {
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tab-btn:hover {
   border-color: #3b82f6;
   color: #3b82f6;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
@@ -615,6 +614,9 @@ const updateProblemType = (evento) => {
 }
 
 .tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   animation: fadeIn 0.4s ease-in;
 }
 
@@ -812,7 +814,7 @@ const updateProblemType = (evento) => {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   border: 2px solid transparent;
 }
 
@@ -821,7 +823,6 @@ const updateProblemType = (evento) => {
 .constraints-card:hover,
 .method-selector-card:hover {
   box-shadow: 0 8px 16px rgba(30, 64, 175, 0.2);
-  transform: translateY(-3px);
   border-color: #3b82f6;
 }
 
