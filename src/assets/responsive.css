@@ -1,9 +1,38 @@
 /**
  * Estilos Responsive Globales
- * Diseño adaptable para todos los dispositivos usando porcentajes y flexbox
+ * Solo variables CSS y reglas específicas de layout principal.
+ * NO incluir selectores genéricos (button, input, table) que rompan componentes.
  */
 
-/* Reset y configuración base */
+/* Variables de diseño para ritmo y cards */
+:root {
+  --card-vertical-gap-desktop: 2rem;
+  --card-vertical-gap-tablet: 1.25rem;
+  --card-vertical-gap-mobile: 1rem;
+  --card-padding-desktop: 1.25rem 1.5rem;
+  --card-padding-mobile: 0.75rem 0.75rem;
+  --card-shadow: 0 4px 12px rgba(14,165,233,0.08);
+  --card-border: 2px solid #e2e8f0;
+  --card-max-width: 720px;
+  --card-vertical-gap: var(--card-vertical-gap-desktop);
+  --card-padding: var(--card-padding-desktop);
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --card-vertical-gap: var(--card-vertical-gap-tablet);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --card-vertical-gap: var(--card-vertical-gap-mobile);
+    --card-padding: var(--card-padding-mobile);
+    --card-max-width: 95%;
+  }
+}
+
+/* Reset base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,135 +50,12 @@ body {
   overflow-x: hidden;
 }
 
-/* Contenedores principales adaptables */
-.app-container {
-  width: 100%;
-  max-width: 100%;
-  padding: 0;
-  margin: 0 auto;
-}
-
-/* Header responsive */
-.header {
-  width: 100%;
-  padding: 2% 4%;
-}
-
-.header-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 3%;
-  width: 100%;
-}
-
-.header-logo {
-  max-width: 15%;
-  height: auto;
-  min-width: 60px;
-}
-
-.header-text {
-  flex: 1;
-}
-
-.title {
-  font-size: clamp(1.2rem, 4vw, 2rem);
-  margin-bottom: 0.5%;
-}
-
-.subtitle {
-  font-size: clamp(0.8rem, 2.5vw, 1rem);
-}
-
-/* Contenido principal */
-.main-content {
-  width: 100%;
-  padding: 2% 4%;
-}
-
-/* Cards y contenedores */
-.card, .method-card, .method-card-direct {
-  width: 100%;
-  padding: 4%;
-  margin-bottom: 3%;
-  border-radius: 12px;
-}
-
-/* Grids adaptables */
-.methods-grid, .methods-grid-direct {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3%;
-  width: 100%;
-}
-
-/* Formularios */
-.form-group {
-  width: 100%;
-  margin-bottom: 3%;
-}
-
-.form-row {
-  display: flex;
-  flex-direction: row;
-  gap: 2%;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.form-row > * {
-  flex: 1 1 calc(50% - 1%);
-  min-width: 200px;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 3%;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  border-radius: 8px;
-}
-
-label {
-  display: block;
-  margin-bottom: 2%;
-  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
-}
-
-/* Botones */
-button, .btn, .btn-primary, .btn-method {
-  width: 100%;
-  padding: 3.5% 5%;
-  font-size: clamp(0.9rem, 2.2vw, 1rem);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2%;
-  width: 100%;
-}
-
-/* Tablas responsive */
-table {
+/* Contenedores con scroll horizontal en mobile */
+.scroll-container {
   width: 100%;
   overflow-x: auto;
-  display: block;
-}
-
-thead, tbody, tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-td, th {
-  padding: 2%;
-  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
-  word-wrap: break-word;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2%;
 }
 
 .table-container {
@@ -158,253 +64,13 @@ td, th {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Tabs responsive */
-.tabs {
-  display: flex;
-  flex-direction: row;
-  gap: 1%;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.tab-button {
-  flex: 1 1 auto;
-  min-width: 100px;
-  padding: 3%;
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
-  white-space: nowrap;
-}
-
-.tab-content {
-  width: 100%;
-  padding: 3%;
-}
-
-/* Footer */
-.footer {
-  width: 100%;
-  padding: 3% 4%;
-  text-align: center;
-  font-size: clamp(0.8rem, 1.8vw, 0.9rem);
-}
-
-/* Resultados y soluciones */
-.solution-container, .result-box {
-  width: 100%;
-  padding: 3%;
-  margin-bottom: 2%;
-}
-
-.iteration-container {
-  width: 100%;
-  padding: 2%;
-}
-
-/* Media Queries para ajustes específicos */
-
-/* Tablets (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .header {
-    padding: 1.5% 3%;
-  }
-
-  .main-content {
-    padding: 1.5% 3%;
-  }
-
-  .methods-grid, .methods-grid-direct {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .form-row > * {
-    flex: 1 1 calc(50% - 1%);
-  }
-
-  .button-group {
-    flex-direction: row;
-  }
-
-  button, .btn {
-    width: auto;
-    padding: 2.5% 4%;
-  }
-}
-
-/* Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .header {
-    padding: 1% 2%;
-  }
-
-  .main-content {
-    padding: 1% 2%;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .methods-grid, .methods-grid-direct {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .form-row > * {
-    flex: 1 1 calc(33.333% - 1.34%);
-  }
-
-  .button-group {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-
-  button, .btn {
-    width: auto;
-    min-width: 150px;
-    padding: 2% 3%;
-  }
-
-  .header-logo {
-    max-width: 80px;
-  }
-}
-
-/* Mobile (hasta 768px) */
-@media (max-width: 767px) {
-  .header {
-    padding: 3% 5%;
-  }
-
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 4%;
-  }
-
-  .header-logo {
-    max-width: 25%;
-    min-width: 80px;
-  }
-
-  .title {
-    font-size: clamp(1.3rem, 5vw, 1.8rem);
-  }
-
-  .subtitle {
-    font-size: clamp(0.85rem, 3vw, 1rem);
-  }
-
-  .main-content {
-    padding: 4% 5%;
-  }
-
-  .methods-grid, .methods-grid-direct {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
-    flex-direction: column;
-  }
-
-  .form-row > * {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-
-  .tabs {
-    flex-direction: column;
-  }
-
-  .tab-button {
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .table-container {
-    font-size: clamp(0.7rem, 2vw, 0.85rem);
-  }
-
-  input, select, textarea {
-    padding: 4%;
-    font-size: 16px; /* Evita zoom en iOS */
-  }
-
-  button, .btn {
-    padding: 4% 6%;
-    font-size: 1rem;
-  }
-}
-
-/* Mobile pequeño (hasta 480px) */
-@media (max-width: 480px) {
-  .header {
-    padding: 4% 6%;
-  }
-
-  .main-content {
-    padding: 5% 6%;
-  }
-
-  .card, .method-card, .method-card-direct {
-    padding: 5%;
-  }
-
-  .title {
-    font-size: 1.4rem;
-  }
-
-  .subtitle {
-    font-size: 0.9rem;
-  }
-
-  td, th {
-    padding: 3%;
-    font-size: 0.75rem;
-  }
-}
-
-/* Landscape en móviles */
-@media (max-height: 500px) and (orientation: landscape) {
-  .header {
-    padding: 2% 3%;
-  }
-
-  .header-logo {
-    max-width: 60px;
-  }
-
-  .title {
-    font-size: 1.2rem;
-  }
-
-  .subtitle {
-    font-size: 0.85rem;
-  }
-}
-
 /* Utilidades responsive */
-.mobile-only {
-  display: none;
-}
-
-.desktop-only {
-  display: block;
-}
+.mobile-only { display: none; }
+.desktop-only { display: block; }
 
 @media (max-width: 767px) {
-  .mobile-only {
-    display: block;
-  }
-
-  .desktop-only {
-    display: none;
-  }
-}
-
-/* Contenedores con scroll horizontal en mobile */
-.scroll-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 2%;
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
 }
 
 /* Evitar zoom en inputs en iOS */

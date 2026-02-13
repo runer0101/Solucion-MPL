@@ -763,6 +763,109 @@ const exportToText = () => {
   .obj-value {
     font-size: 1.5rem;
   }
+
+  .obj-label {
+    font-size: 1rem;
+  }
+
+  .objective-value {
+    padding: 1rem;
+    font-size: 1.2rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .solution-interpretation {
+    padding: 1.25rem;
+  }
+
+  .solution-interpretation h3 {
+    font-size: 1.2rem;
+  }
+
+  .interpretation-intro {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  .interpretation-card {
+    padding: 1rem;
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+  }
+
+  .interpretation-card h4 {
+    font-size: 1rem;
+  }
+
+  .interpretation-card p {
+    font-size: 0.88rem;
+  }
+
+  .iterations-header {
+    padding: 1rem;
+  }
+
+  .iteration-indicator {
+    min-width: auto;
+    font-size: 0.95rem;
+  }
+
+  .iteration-explanation {
+    padding: 1rem;
+  }
+
+  /* Comparación de métodos */
+  .solution-comparison {
+    padding: 1.25rem;
+  }
+
+  .main-title {
+    font-size: 1.4rem;
+  }
+
+  .main-description {
+    font-size: 0.95rem;
+  }
+
+  .comparison-card {
+    padding: 1rem;
+  }
+
+  .comparison-card h3 {
+    font-size: 1rem;
+  }
+
+  .comparison-card .z-value {
+    font-size: 1.4rem;
+  }
+
+  .method-section {
+    padding: 1.25rem;
+  }
+
+  .method-title {
+    font-size: 1.2rem;
+  }
+
+  .recommendation-section {
+    padding: 1rem;
+  }
+
+  .recommendation-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .recommendation-content {
+    padding: 1rem;
+  }
+
+  .recommendation-text {
+    font-size: 0.9rem;
+  }
 }
 
 /* Estilos para explicaciones detalladas */

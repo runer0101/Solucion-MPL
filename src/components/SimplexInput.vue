@@ -1191,6 +1191,18 @@ const updateProblemType = (evento) => {
 }
 
 @media (max-width: 768px) {
+  .tabs-container {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .tab-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+    text-align: center;
+  }
+
   .config-card,
   .objective-card,
   .constraints-card {
@@ -1237,6 +1249,18 @@ const updateProblemType = (evento) => {
 }
 
 @media (max-width: 480px) {
+  .tabs-container {
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.6rem;
+  }
+
+  .tab-btn {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.88rem;
+  }
+
   .config-card,
   .objective-card,
   .constraints-card {

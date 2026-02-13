@@ -816,7 +816,7 @@ const numMetodosDisponibles = computed(() => {
         <button @click="loadTransportExample" class="btn btn-secondary btn-example">
           Cargar Ejemplo Transporte
         </button>
-        <button @click="compareAllMethods" class="btn btn-primary btn-solve-main">
+        <button @click="compareAllMethods" class="btn btn-secondary btn-solve-main">
           Resolver y Comparar Métodos
         </button>
       </div>
@@ -2417,6 +2417,246 @@ const numMetodosDisponibles = computed(() => {
 
   .value-z {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .comparar-todos {
+    gap: 1rem;
+  }
+
+  .section-header-card {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .input-card {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .usage-guide {
+    padding: 1.25rem;
+  }
+
+  .usage-guide h3 {
+    font-size: 1.2rem;
+  }
+
+  .guide-intro {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .methods-explanation {
+    padding: 1rem;
+  }
+
+  .method-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .config-section {
+    padding: 1rem;
+  }
+
+  .objective-function {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .coef-input {
+    width: 65px;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .coef-input.small {
+    width: 60px;
+  }
+
+  .coef-input.rhs {
+    width: 75px;
+  }
+
+  .constraint-row {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .function-label {
+    font-size: 0.95rem;
+  }
+
+  .variable-label {
+    font-size: 0.9rem;
+  }
+
+  .objective-section h3,
+  .constraints-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Transporte preview */
+  .transport-preview-section {
+    padding: 1.25rem;
+  }
+
+  .transport-preview-section h3 {
+    font-size: 1.15rem;
+  }
+
+  .transport-config {
+    grid-template-columns: 1fr;
+    padding: 0.75rem;
+  }
+
+  .transport-table th,
+  .transport-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .transport-table .cost-cell,
+  .transport-table .supply-cell,
+  .transport-table .demand-cell {
+    font-size: 0.95rem;
+  }
+
+  /* Soluciones */
+  .solutions-header {
+    padding: 1.25rem;
+  }
+
+  .solutions-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .solutions-header p {
+    font-size: 0.95rem;
+  }
+
+  .comparison-table-container {
+    padding: 0.75rem;
+  }
+
+  .comparison-table {
+    font-size: 0.8rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem 0.35rem;
+  }
+
+  .result-detail-card,
+  .method-result-card {
+    padding: 1.25rem;
+  }
+
+  .result-title {
+    font-size: 1.2rem;
+  }
+
+  .result-summary {
+    padding: 1rem;
+  }
+
+  .result-z {
+    font-size: 1.1rem;
+  }
+
+  .result-z strong {
+    font-size: 1.25rem;
+  }
+
+  /* Conclusión */
+  .final-conclusion {
+    padding: 1.5rem;
+  }
+
+  .conclusion-title {
+    font-size: 1.4rem;
+  }
+
+  .optimal-solution-box {
+    padding: 1.5rem;
+  }
+
+  .best-method-name {
+    font-size: 1.4rem;
+  }
+
+  .best-value {
+    font-size: 1.2rem;
+  }
+
+  .best-value strong {
+    font-size: 1.6rem;
+  }
+
+  /* Comparaciones */
+  .comparison-boxes {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-box {
+    padding: 1rem;
+  }
+
+  .differences-content {
+    padding: 1rem;
+  }
+
+  .differences-content h4 {
+    font-size: 1rem;
+  }
+
+  /* Validación */
+  .validation-title {
+    font-size: 1.3rem;
+  }
+
+  .validation-box {
+    padding: 1.25rem;
+  }
+
+  .validation-message {
+    font-size: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .methods-badges {
+    gap: 0.5rem;
+  }
+
+  .method-badge {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
   }
 }
 </style>

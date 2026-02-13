@@ -1975,5 +1975,333 @@ const getMejorMetodo = () => {
   .problem-explanation {
     padding: 1.5rem;
   }
+
+  .tabs-container {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .tab-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+    text-align: center;
+  }
+
+  .method-buttons {
+    flex-direction: column;
+  }
+
+  .method-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .transporte-container {
+    padding: 0.75rem;
+  }
+
+  .section-header {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  /* Tabs responsive */
+  .tabs-container {
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.6rem;
+  }
+
+  .tab-btn {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.88rem;
+  }
+
+  /* Explicación del problema */
+  .problem-explanation {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .explanation-card {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .explanation-card h3 {
+    font-size: 1.15rem;
+  }
+
+  .explanation-card p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .data-requirements h4 {
+    font-size: 1.1rem;
+    padding-left: 0.75rem;
+  }
+
+  .requirement-item {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .requirement-number {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+  }
+
+  .requirement-content strong {
+    font-size: 0.95rem;
+  }
+
+  .requirement-content p {
+    font-size: 0.88rem;
+  }
+
+  .important-note {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  /* Configuración de dimensiones */
+  .dimensions-config,
+  .table-section,
+  .method-selection {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .dimensions-config h3,
+  .table-section h3,
+  .method-selection h3 {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+
+  .dimension-input {
+    padding: 0.75rem;
+  }
+
+  .label-title {
+    font-size: 0.95rem;
+  }
+
+  .label-help {
+    font-size: 0.85rem;
+  }
+
+  .dimension-input input {
+    width: 70px;
+  }
+
+  /* Tabla de costos */
+  .table-instructions {
+    padding: 1rem;
+  }
+
+  .table-instructions p {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .table-instructions li {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0.5rem 0;
+  }
+
+  .costos-table th,
+  .costos-table td {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .costo-input,
+  .oferta-input,
+  .demanda-input {
+    width: 60px;
+    padding: 0.3rem;
+    font-size: 0.85rem;
+  }
+
+  .balance-info {
+    gap: 1rem;
+    padding: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .balance-cell {
+    font-size: 1.2rem;
+  }
+
+  /* Métodos */
+  .method-help {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  .method-btn {
+    padding: 1rem;
+  }
+
+  .method-name {
+    font-size: 1rem;
+  }
+
+  .method-desc {
+    font-size: 0.85rem;
+  }
+
+  .balance-warning {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  /* Botón resolver */
+  .btn-resolver {
+    padding: 1rem 2rem;
+    font-size: 1.05rem;
+  }
+
+  /* Soluciones */
+  .solutions-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .solution-card {
+    padding: 1.25rem;
+  }
+
+  .solution-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .method-description {
+    font-size: 0.88rem;
+  }
+
+  .solution-summary {
+    padding: 1rem;
+  }
+
+  .summary-label {
+    font-size: 0.95rem;
+  }
+
+  .summary-value {
+    font-size: 1.2rem;
+  }
+
+  .resultado-table th,
+  .resultado-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .costo-valor {
+    font-size: 1.2rem;
+  }
+
+  .paso-item {
+    padding: 0.75rem;
+  }
+
+  /* Comparación */
+  .comparison-card {
+    padding: 1.25rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* Teoría */
+  .theory-section,
+  .tutorial-section {
+    padding: 1.25rem;
+  }
+
+  .theory-section h2,
+  .tutorial-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .theory-block h3 {
+    font-size: 1.2rem;
+  }
+
+  .theory-block p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .component-card {
+    padding: 1rem;
+  }
+
+  .component-card h4 {
+    font-size: 1rem;
+  }
+
+  .method-card {
+    padding: 1rem;
+  }
+
+  .method-card h4 {
+    font-size: 1rem;
+  }
+
+  /* Tutorial */
+  .tutorial-intro {
+    font-size: 0.95rem;
+  }
+
+  .tutorial-step {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .step-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .step-content p {
+    font-size: 0.9rem;
+  }
+
+  .btn-go-calculator {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .btn-export,
+  .btn-back {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 </style>
