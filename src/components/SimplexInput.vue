@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import MethodExplanation from './MethodExplanation.vue'
 import { SIMPLEX_EXAMPLES } from '../data/examples.js'
 
@@ -19,24 +19,12 @@ const emit = defineEmits(['solve'])
 const selectedMethod = ref(props.selectedMethod)
 const activeTab = ref('calculadora')
 const showExamples = ref(false)
+const errorMessage = ref('')
 
 const objectiveCoefficients = ref([])
 const constraintCoefficients = ref([])
 const constraintRHS = ref([])
 const constraintTypes = ref([])
-
-// ===== COMPUTED PROPERTIES =====
-const isFormValid = computed(() => {
-  return objectiveCoefficients.value.every(c => c !== '' && !isNaN(c)) &&
-         constraintCoefficients.value.every(row =>
-           row.every(c => c !== '' && !isNaN(c))
-         ) &&
-         constraintRHS.value.every(c => c !== '' && !isNaN(c))
-})
-
-const problemDimensions = computed(() =>
-  `${numVariables.value} variables × ${numConstraints.value} restricciones`
-)
 
 // ===== FUNCIONES =====
 const initializeMatrices = () => {
@@ -73,10 +61,10 @@ const validateInputs = () => {
 const handleSolve = () => {
   const error = validateInputs()
   if (error) {
-    alert(`Error: ${error}`)
+    errorMessage.value = error
     return
   }
-
+  errorMessage.value = ''
   emit('solve', {
     type: problemType.value,
     numVariables: numVariables.value,
@@ -223,6 +211,7 @@ initializeMatrices()
 
     <!-- Contenido: Calculadora -->
     <div v-else class="tab-content">
+    <div v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</div>
     <div class="config-card">
       <h2 class="section-title"><span class="text-gradient">Configuración del Problema</span></h2>
 

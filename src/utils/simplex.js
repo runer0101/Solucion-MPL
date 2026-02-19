@@ -211,7 +211,7 @@ export class SimplexSolver {
   }
 
   createInitialTableau(standardForm) {
-    const { numVariables, numConstraints, objective, constraints, rhs, constraintTypes, variableTypes } = standardForm
+    const { numVariables, numConstraints, objective, constraints, rhs, constraintTypes } = standardForm
 
     // Crear tableau: [restricciones, función objetivo]
     const tableau = []
@@ -223,7 +223,6 @@ export class SimplexSolver {
       const row = [...constraints[i]]
 
       // Extender con ceros para variables adicionales
-      const totalVars = numVariables + 1 // +1 para RHS
       while (row.length < numVariables) {
         row.push(0)
       }
@@ -545,7 +544,7 @@ export class SimplexSolver {
    * @param {object} formaEstandar - Información del problema
    * @returns {number} - Índice de la columna de la variable básica, o -1 si no hay
    */
-  findBasicVariableInRow(tablaSimplex, indiceDeFila, formaEstandar) {
+  findBasicVariableInRow(tablaSimplex, indiceDeFila) {
     const numeroDeColumnas = tablaSimplex[0].length - 1
 
     // Revisar cada columna para ver si es básica en esta fila

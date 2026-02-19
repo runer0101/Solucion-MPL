@@ -213,7 +213,7 @@ export class GraphicMethodSolver {
    * Evalúa la función objetivo en cada vértice
    */
   evaluateObjective() {
-    const { objective, type } = this.problemData
+    const { objective } = this.problemData
     const [c1, c2] = objective
 
     return this.vertices.map(vertex => {
@@ -342,7 +342,7 @@ export class GraphicMethodSolver {
    * Explicación de las evaluaciones
    */
   explainEvaluations(evaluations) {
-    const { type, objective } = this.problemData
+    const { objective } = this.problemData
     const [c1, c2] = objective
 
     let html = '<div class="explanation-section">'

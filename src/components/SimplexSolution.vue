@@ -4,6 +4,7 @@ import { SimplexSolver } from '../utils/simplex.js'
 import { GraphicMethodSolver } from '../utils/grafico.js'
 import { formatNumber } from '../utils/formatters.js'
 import SimplexTable from './SimplexTable.vue'
+import DOMPurify from 'dompurify'
 
 // ===== PROPS Y EMITS =====
 const props = defineProps({
@@ -21,30 +22,6 @@ const result = computed(() => {
   if (!selectedMethod.value) return results.value.simplex
   if (selectedMethod.value === 'todos') return results.value.simplex
   return results.value[selectedMethod.value] || results.value.simplex
-})
-
-const hasGraphicSolution = computed(() => results.value.grafico !== null && results.value.grafico !== undefined)
-
-const optimalValue = computed(() => {
-  if (!result.value) return null
-  return formatNumber(result.value.optimalValue || 0)
-})
-
-const solutionVariables = computed(() => {
-  if (!result.value?.solution) return []
-  return result.value.solution.map((val, idx) => ({
-    name: `X${idx + 1}`,
-    value: formatNumber(val)
-  }))
-})
-
-const methodLabel = computed(() => {
-  const labels = {
-    simplex: 'Método Simplex',
-    grafico: 'Método Gráfico',
-    todos: 'Comparación de Métodos'
-  }
-  return labels[selectedMethod.value] || 'Solución'
 })
 
 // ===== FUNCIONES =====
@@ -73,10 +50,6 @@ const solveWithAllMethods = () => {
   }
 }
 
-const switchMethod = (method) => {
-  selectedMethod.value = method
-}
-
 // ===== WATCHERS =====
 watch(() => props.problemData, () => {
   solveProblem()
@@ -86,6 +59,14 @@ watch(() => props.problemData, () => {
 onMounted(() => {
   solveProblem()
 })
+
+const sanitize = (html) => {
+  try {
+    return DOMPurify.sanitize(html || '')
+  } catch (e) {
+    return ''
+  }
+}
 
 const exportToText = () => {
   if (!result.value) return
@@ -123,6 +104,32 @@ const exportToText = () => {
   a.download = 'simplex-solution.txt'
   a.click()
   URL.revokeObjectURL(url)
+}
+
+const exportToPDF = async () => {
+  if (!result.value) return
+  try {
+    const { jsPDF } = await import('jspdf')
+    await import('jspdf-autotable')
+    const doc = new jsPDF()
+    doc.text('Solución - Método Simplex', 14, 20)
+
+    // Tabla simple con variables
+    const headers = [['Variable', 'Valor']]
+    const body = []
+    if (result.value.solution) {
+      result.value.solution.variables.forEach((v, i) => {
+        body.push([`X${i + 1}`, formatNumber(v)])
+      })
+      body.push(['Z', formatNumber(result.value.solution.objectiveValue)])
+    }
+
+    // @ts-ignore - plugin registers itself on jsPDF
+    doc.autoTable({ head: headers, body, startY: 30 })
+    doc.save('simplex-solution.pdf')
+  } catch (e) {
+    console.error('Error exporting PDF', e)
+  }
 }
 </script>
 
@@ -197,8 +204,8 @@ const exportToText = () => {
           <div v-for="(step, index) in results.grafico.steps" :key="index" class="iteration-card">
             <h3>{{ step.title }}</h3>
             <div class="iteration-explanation">
-              <div v-html="step.explanation"></div>
-            </div>
+                <div v-html="sanitize(step.explanation)"></div>
+              </div>
             <div v-if="step.vertices" class="vertices-display">
               <h4>Vértices encontrados:</h4>
               <ul>
@@ -253,12 +260,12 @@ const exportToText = () => {
         >
           <h3>
             <span class="title-content">
-              <span class="text-gradient">Tabla Inicial</span>
+              <span class="text-gradient">{{ index === 0 ? 'Tabla Inicial' : `Iteración ${index}` }}</span>
             </span>
             <span v-if="iteration.isOptimal" class="optimal-badge"> Óptima</span>
           </h3>
           <div class="iteration-explanation">
-            <div v-html="iteration.explanation"></div>
+            <div v-html="sanitize(iteration.explanation)"></div>
           </div>
 
           <SimplexTable
@@ -324,6 +331,9 @@ const exportToText = () => {
     <div style="height: 10px;"></div>
       <!-- Acciones -->
       <div class="action-buttons">
+        <button @click="exportToPDF" class="btn btn-secondary">
+          Exportar a PDF
+        </button>
         <button @click="exportToText" class="btn btn-secondary">
           Exportar a Texto
         </button>

@@ -1,12 +1,9 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import TransporteSolver from '../utils/transporte.js'
 import MethodExplanation from './MethodExplanation.vue'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-
-// ===== EMITS =====
-const emit = defineEmits(['solve'])
 
 // ===== ESTADO REACTIVO =====
 const numOrigenes = ref(3)
@@ -25,22 +22,6 @@ const mostrarPasosEsquina = ref(false)
 const mostrarPasosCosto = ref(false)
 const mostrarPasosVogel = ref(false)
 const activeTab = ref('calculadora')
-
-// ===== COMPUTED PROPERTIES =====
-const esValido = computed(() => {
-  const sumaOferta = oferta.value.reduce((a, b) => a + b, 0)
-  const sumaDemanda = demanda.value.reduce((a, b) => a + b, 0)
-  return sumaOferta === sumaDemanda && costos.value.every(row => row.every(c => !isNaN(c)))
-})
-
-const mensajeValidacion = computed(() => {
-  const sumaOferta = oferta.value.reduce((a, b) => a + b, 0)
-  const sumaDemanda = demanda.value.reduce((a, b) => a + b, 0)
-  if (sumaOferta !== sumaDemanda) {
-    return `Oferta (${sumaOferta}) debe igual Demanda (${sumaDemanda})`
-  }
-  return null
-})
 
 // ===== FUNCIONES =====
 const actualizarTamanos = () => {

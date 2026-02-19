@@ -17,10 +17,6 @@ const constraintTypes = ref([])
 const numOrigenes = ref(2)
 const numDestinos = ref(2)
 
-// Explicación de la correlación
-const showCorrelation = ref(false)
-const showDifferences = ref(false)
-
 // Estado de las soluciones
 const showSolutions = ref(false)
 const solutionResults = ref({
@@ -297,7 +293,6 @@ const compareAllMethods = () => {
         solutionResults.value.costoMinimo = { error: 'Error al calcular', factible: false }
         solutionResults.value.vogel = { error: 'Error al calcular', factible: false }
       }
-    } else {
     }
   }
 
@@ -438,39 +433,6 @@ const resetComparison = () => {
   }
 }
 
-const isBestSolution = (method) => {
-  if (!solutionResults.value[method] || solutionResults.value[method].error) return false
-
-  const values = []
-
-  // Recopilar todos los valores Z válidos
-  if (solutionResults.value.grafico && !solutionResults.value.grafico.error) {
-    values.push(solutionResults.value.grafico.z)
-  }
-  if (solutionResults.value.simplex && !solutionResults.value.simplex.error) {
-    values.push(solutionResults.value.simplex.z)
-  }
-  if (solutionResults.value.esquinaNoroeste && !solutionResults.value.esquinaNoroeste.error) {
-    values.push(solutionResults.value.esquinaNoroeste.z)
-  }
-  if (solutionResults.value.costoMinimo && !solutionResults.value.costoMinimo.error) {
-    values.push(solutionResults.value.costoMinimo.z)
-  }
-  if (solutionResults.value.vogel && !solutionResults.value.vogel.error) {
-    values.push(solutionResults.value.vogel.z)
-  }
-
-  if (values.length === 0) return false
-
-  const currentZ = solutionResults.value[method].z
-
-  if (problemType.value === 'max') {
-    return currentZ === Math.max(...values)
-  } else {
-    return currentZ === Math.min(...values)
-  }
-}
-
 const getBestMethod = () => {
   const methods = []
 
@@ -549,12 +511,6 @@ const esProblemaTransporte = computed(() => {
   return false
 })
 
-const numMetodosDisponibles = computed(() => {
-  let count = 1 // Simplex siempre está disponible
-  if (canUseGraphicMethod.value) count++
-  if (esProblemaTransporte.value) count++ // Un método de transporte (el mejor de 3)
-  return count
-})
 </script>
 
 <template>

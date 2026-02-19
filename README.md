@@ -61,8 +61,8 @@ Validacion cruzada y comparacion automatica entre todos los metodos aplicables p
 
 ### Prerequisitos
 
-- Node.js 20 o superior
-- npm o yarn
+- [Node.js](https://nodejs.org/) v20.19+ o v22.12+
+- npm (incluido con Node.js)
 
 ### Instalacion
 
@@ -79,6 +79,19 @@ npm run dev
 ```
 
 El servidor de desarrollo estara disponible en `http://localhost:5173`
+
+### Comandos de calidad y pruebas
+
+```bash
+# Ejecutar linter
+npm run lint
+
+# Formatear codigo
+npm run format
+
+# Ejecutar tests unitarios
+npm run test
+```
 
 ### Compilacion para Produccion
 
@@ -162,8 +175,14 @@ Solucion-MPL/
 ├── public/
 │   └── images/                   # Recursos graficos
 ├── .github/workflows/
-│   └── deploy.yml                # GitHub Actions CI/CD
+│   ├── deploy.yml                # GitHub Actions deploy a GitHub Pages
+│   └── ci.yml                    # CI: lint, tests, build
+├── test/
+│   └── simplex.spec.js           # Tests unitarios (Vitest)
+├── .eslintrc.cjs                 # Configuracion ESLint
+├── .prettierrc                   # Configuracion Prettier
 ├── vite.config.js                # Configuracion de Vite
+├── vitest.config.js              # Configuracion de Vitest
 ├── jsconfig.json                 # Configuracion de paths (@/)
 ├── package.json                  # Dependencias y scripts
 └── README.md                     # Documentacion

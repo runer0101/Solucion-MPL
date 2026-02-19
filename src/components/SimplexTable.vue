@@ -2,6 +2,15 @@
 // Componente de tabla Simplex
 import { computed } from 'vue'
 import { formatNumber } from '../utils/formatters.js'
+import DOMPurify from 'dompurify'
+
+const sanitize = (html) => {
+  try {
+    return DOMPurify.sanitize(html || '')
+  } catch (e) {
+    return ''
+  }
+}
 
 const props = defineProps({
   tableau: Array,
@@ -123,7 +132,7 @@ const isZRow = (displayIndex) => {
                 'rhs-col': colIndex === tableau[0].length - 1
               }"
             >
-              <span v-html="getColumnHeader(colIndex)"></span>
+              <span v-html="sanitize(getColumnHeader(colIndex))"></span>
             </th>
           </tr>
         </thead>
@@ -138,7 +147,7 @@ const isZRow = (displayIndex) => {
             }"
           >
             <td class="row-header" :class="{ 'z-row-header': isZRow(displayIndex) }">
-              <span v-html="getRowHeader(displayIndex)"></span>
+              <span v-html="sanitize(getRowHeader(displayIndex))"></span>
             </td>
             <td
               v-for="(cell, colIndex) in row"

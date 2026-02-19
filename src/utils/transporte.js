@@ -192,6 +192,7 @@ export class TransporteSolver {
     let filasActivas = Array(m).fill(true)
     let columnasActivas = Array(n).fill(true)
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Verificar si quedan asignaciones por hacer
       let hayOferta = ofertaRestante.some(o => o > 0)
