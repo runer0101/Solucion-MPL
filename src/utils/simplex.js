@@ -4,6 +4,7 @@ import { formatNumber } from './formatters.js'
 // Constantes de configuración
 const EPSILON = 0.0001 // Tolerancia para comparaciones numéricas
 const MAX_ITERATIONS = 100 // Máximo de iteraciones permitidas
+const BIG_M = 1e6 // Penalización para variables artificiales (Método de la M Grande)
 
 export class SimplexSolver {
   constructor(problemData) {
@@ -183,14 +184,14 @@ export class SimplexSolver {
         contadorVariablesArtificiales++
         tiposDeVariablesAgregadas.push({ type: 'surplus', constraintIndex: indiceRestriccion })
         tiposDeVariablesAgregadas.push({ type: 'artificial', constraintIndex: indiceRestriccion })
-        coeficientesObjetivo.push(0) // Variable de exceso
-        coeficientesObjetivo.push(0) // Variable artificial (se penalizará después)
+        coeficientesObjetivo.push(0)     // Variable de exceso: no afecta Z
+        coeficientesObjetivo.push(-BIG_M) // Variable artificial: penalización Big-M (maximización)
       } else if (tipoDeRestriccion === '=') {
         // Restricción tipo =: Agregar variable artificial
         // Ejemplo: X₁ + X₂ = 8  →  X₁ + X₂ + A₁ = 8
         contadorVariablesArtificiales++
         tiposDeVariablesAgregadas.push({ type: 'artificial', constraintIndex: indiceRestriccion })
-        coeficientesObjetivo.push(0) // Variable artificial
+        coeficientesObjetivo.push(-BIG_M) // Variable artificial: penalización Big-M (maximización)
       }
     }
 
@@ -857,16 +858,31 @@ export class SimplexSolver {
    * obtenerNombreVariable(5, form) // "S<sub>3</sub>" (si hay 3 vars originales)
    */
   obtenerNombreVariable(indiceColumna, formaEstandar) {
-    const esVariableOriginal = indiceColumna < formaEstandar.numOriginalVariables
-
-    if (esVariableOriginal) {
+    if (indiceColumna < formaEstandar.numOriginalVariables) {
       // Variable de decisión original (X1, X2, ...)
       return `X<sub>${indiceColumna + 1}</sub>`
-    } else {
-      // Variable de holgura/exceso (S1, S2, ...)
-      const numeroDeHolgura = indiceColumna - formaEstandar.numOriginalVariables + 1
-      return `S<sub>${numeroDeHolgura}</sub>`
     }
+
+    // Determinar si es holgura/exceso o artificial según variableTypes
+    const indiceAuxiliar = indiceColumna - formaEstandar.numOriginalVariables
+    const tipoVar = formaEstandar.variableTypes[indiceAuxiliar]
+
+    if (tipoVar && tipoVar.type === 'artificial') {
+      // Contar cuántas artificiales hay antes de esta
+      let contArtificial = 0
+      for (let k = 0; k <= indiceAuxiliar; k++) {
+        if (formaEstandar.variableTypes[k]?.type === 'artificial') contArtificial++
+      }
+      return `A<sub>${contArtificial}</sub>`
+    }
+
+    // Variable de holgura o exceso (S1, S2, ...)
+    let contHolgura = 0
+    for (let k = 0; k <= indiceAuxiliar; k++) {
+      const t = formaEstandar.variableTypes[k]?.type
+      if (t === 'slack' || t === 'surplus') contHolgura++
+    }
+    return `S<sub>${contHolgura}</sub>`
   }
 
   /**
@@ -885,4 +901,4 @@ export class SimplexSolver {
 }
 
 // Exportar constantes para uso en otros módulos si es necesario
-export { EPSILON, MAX_ITERATIONS }
+export { EPSILON, MAX_ITERATIONS, BIG_M }
