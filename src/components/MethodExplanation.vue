@@ -41,16 +41,16 @@ const headerDescription = computed(() => {
 
     <div class="explanation-nav">
       <button
-        @click="activeSection = 'intro'"
         :class="{ active: activeSection === 'intro' }"
         class="nav-btn"
+        @click="activeSection = 'intro'"
       >
         Introducción
       </button>
       <button
-        @click="activeSection = 'steps'"
         :class="{ active: activeSection === 'steps' }"
         class="nav-btn"
+        @click="activeSection = 'steps'"
       >
         Pasos del Algoritmo
       </button>

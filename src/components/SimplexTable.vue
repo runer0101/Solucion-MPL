@@ -13,12 +13,30 @@ const sanitize = (html) => {
 }
 
 const props = defineProps({
-  tableau: Array,
-  iteration: Number,
-  pivotRow: Number,
-  pivotCol: Number,
-  isOptimal: Boolean,
-  numOriginalVars: Number,
+  tableau: {
+    type: Array,
+    default: () => []
+  },
+  iteration: {
+    type: Number,
+    default: 0
+  },
+  pivotRow: {
+    type: Number,
+    default: -1
+  },
+  pivotCol: {
+    type: Number,
+    default: -1
+  },
+  isOptimal: {
+    type: Boolean,
+    default: false
+  },
+  numOriginalVars: {
+    type: Number,
+    default: 0
+  },
   compact: {
     type: Boolean,
     default: false
@@ -132,6 +150,7 @@ const isZRow = (displayIndex) => {
                 'rhs-col': colIndex === tableau[0].length - 1
               }"
             >
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <span v-html="sanitize(getColumnHeader(colIndex))"></span>
             </th>
           </tr>
@@ -147,6 +166,7 @@ const isZRow = (displayIndex) => {
             }"
           >
             <td class="row-header" :class="{ 'z-row-header': isZRow(displayIndex) }">
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <span v-html="sanitize(getRowHeader(displayIndex))"></span>
             </td>
             <td

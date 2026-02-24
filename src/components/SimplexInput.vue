@@ -111,23 +111,23 @@ initializeMatrices()
     <!-- Sistema de Pestañas -->
     <div class="tabs-container">
       <button
-        @click="activeTab = 'calculadora'"
         :class="{ active: activeTab === 'calculadora' }"
         class="tab-btn"
+        @click="activeTab = 'calculadora'"
       >
         Calculadora
       </button>
       <button
-        @click="activeTab = 'pasoapaso'"
         :class="{ active: activeTab === 'pasoapaso' }"
         class="tab-btn"
+        @click="activeTab = 'pasoapaso'"
       >
         Paso a Paso
       </button>
       <button
-        @click="activeTab = 'teoria'"
         :class="{ active: activeTab === 'teoria' }"
         class="tab-btn"
+        @click="activeTab = 'teoria'"
       >
         Teoría
       </button>
@@ -196,7 +196,7 @@ initializeMatrices()
           </div>
         </div>
 
-        <button @click="activeTab = 'calculadora'" class="btn-go-calculator">
+        <button class="btn-go-calculator" @click="activeTab = 'calculadora'">
           Ir a la Calculadora
         </button>
       </div>
@@ -205,7 +205,7 @@ initializeMatrices()
     <!-- Contenido: Teoría -->
     <div v-else-if="activeTab === 'teoria'" class="tab-content">
       <div class="method-explanation-section">
-        <MethodExplanation :selectedMethod="selectedMethod" />
+        <MethodExplanation :selected-method="selectedMethod" />
       </div>
     </div>
 
@@ -220,8 +220,8 @@ initializeMatrices()
           <label for="num-vars">Número de Variables:</label>
           <input
             id="num-vars"
-            type="number"
             v-model.number="numVariables"
+            type="number"
             min="1"
             max="10"
             class="form-input"
@@ -233,8 +233,8 @@ initializeMatrices()
           <label for="num-constraints">Número de Restricciones:</label>
           <input
             id="num-constraints"
-            type="number"
             v-model.number="numConstraints"
+            type="number"
             min="1"
             max="10"
             class="form-input"
@@ -284,7 +284,7 @@ initializeMatrices()
       </div>
 
       <div class="examples-section">
-        <button @click="showExamples = !showExamples" class="btn btn-secondary">
+        <button class="btn btn-secondary" @click="showExamples = !showExamples">
           {{ showExamples ? 'Ocultar Ejemplos' : 'Ver Ejemplos' }}
         </button>
 
@@ -366,7 +366,7 @@ initializeMatrices()
     </div>
 
     <div class="action-buttons">
-      <button @click="handleSolve" class="btn btn-secondary btn-solve-large">
+      <button class="btn btn-secondary btn-solve-large" @click="handleSolve">
         Resolver Problema
       </button>
     </div>

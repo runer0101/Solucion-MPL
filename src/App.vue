@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
-import SimplexInput from './components/SimplexInput.vue'
-import SimplexSolution from './components/SimplexSolution.vue'
-import TransporteInput from './components/TransporteInput.vue'
-import CompararTodos from './components/CompararTodos.vue'
+import { ref, onMounted, onUnmounted, nextTick, watch, defineAsyncComponent } from 'vue'
 import { vRipple } from './directives/ripple.js'
+
+const SimplexInput = defineAsyncComponent(() => import('./components/SimplexInput.vue'))
+const SimplexSolution = defineAsyncComponent(() => import('./components/SimplexSolution.vue'))
+const TransporteInput = defineAsyncComponent(() => import('./components/TransporteInput.vue'))
+const CompararTodos = defineAsyncComponent(() => import('./components/CompararTodos.vue'))
 
 // ===== ESTADO REACTIVO =====
 const numVariables = ref(2)
@@ -142,10 +143,10 @@ watch(currentView, (newVal) => {
             </div>
             <button
               v-ripple
-              @click="startSolving('simplex')"
               class="btn-method btn-simplex"
               aria-label="Resolver con Método Simplex"
               :aria-busy="currentView === 'simplex'"
+              @click="startSolving('simplex')"
             >
               Resolver con Simplex
             </button>
@@ -167,9 +168,9 @@ watch(currentView, (newVal) => {
             </div>
             <button
               v-ripple
-              @click="startSolving('grafico')"
               class="btn-method btn-graphic"
               aria-label="Resolver con Método Gráfico"
+              @click="startSolving('grafico')"
             >
               Resolver con Gráfico
             </button>
@@ -191,9 +192,9 @@ watch(currentView, (newVal) => {
             </div>
             <button
               v-ripple
-              @click="startSolving('penalizacion')"
               class="btn-method btn-penalty"
               aria-label="Resolver con Métodos de Transporte"
+              @click="startSolving('penalizacion')"
             >
               Resolver Transporte
             </button>
@@ -209,9 +210,9 @@ watch(currentView, (newVal) => {
             </div>
             <button
               v-ripple
-              @click="startSolving('todos')"
               class="btn-compare-all"
               aria-label="Comparar todos los métodos disponibles"
+              @click="startSolving('todos')"
             >
               Comparar Todos los Métodos
             </button>
@@ -280,21 +281,21 @@ watch(currentView, (newVal) => {
       <section v-else class="method-view" role="region" aria-label="Resolución de problemas">
         <!-- Navigation Bar -->
         <nav class="method-navigation" role="navigation" aria-label="Métodos disponibles">
-          <button 
-            @click="backToWelcome" 
+          <button
             class="nav-back-btn"
             aria-label="Volver a inicio"
+            @click="backToWelcome"
           >
             ← Inicio
           </button>
 
           <!-- Mobile Hamburger Button -->
-          <button 
-            class="hamburger-btn" 
-            @click="mobileMenuOpen = !mobileMenuOpen" 
+          <button
+            class="hamburger-btn"
             :class="{ open: mobileMenuOpen }"
             :aria-expanded="mobileMenuOpen"
             aria-label="Menú de métodos"
+            @click="mobileMenuOpen = !mobileMenuOpen"
           >
             <span class="hamburger-line" aria-hidden="true"></span>
             <span class="hamburger-line" aria-hidden="true"></span>
@@ -304,42 +305,42 @@ watch(currentView, (newVal) => {
           <!-- Method Tabs -->
           <div class="method-tabs" :class="{ 'mobile-open': mobileMenuOpen }" role="tablist">
             <button
-              @click="goToMethod('simplex')"
-              :class="{ active: currentView === 'simplex' }"
               class="method-tab"
+              :class="{ active: currentView === 'simplex' }"
               role="tab"
               :aria-selected="currentView === 'simplex'"
               aria-label="Método Simplex"
+              @click="goToMethod('simplex')"
             >
               Método Simplex
             </button>
             <button
-              @click="goToMethod('grafico')"
-              :class="{ active: currentView === 'grafico' }"
               class="method-tab"
+              :class="{ active: currentView === 'grafico' }"
               role="tab"
               :aria-selected="currentView === 'grafico'"
               aria-label="Método Gráfico"
+              @click="goToMethod('grafico')"
             >
               Método Gráfico
             </button>
             <button
-              @click="goToMethod('penalizacion')"
-              :class="{ active: currentView === 'penalizacion' }"
               class="method-tab"
+              :class="{ active: currentView === 'penalizacion' }"
               role="tab"
               :aria-selected="currentView === 'penalizacion'"
               aria-label="Métodos de Transporte"
+              @click="goToMethod('penalizacion')"
             >
               Métodos de Transporte
             </button>
             <button
-              @click="goToMethod('todos')"
-              :class="{ active: currentView === 'todos' }"
               class="method-tab method-tab-all"
+              :class="{ active: currentView === 'todos' }"
               role="tab"
               :aria-selected="currentView === 'todos'"
               aria-label="Comparar todos los métodos"
+              @click="goToMethod('todos')"
             >
               Comparar Todos
             </button>
@@ -358,10 +359,10 @@ watch(currentView, (newVal) => {
           <SimplexInput
             v-else
             :key="currentView"
-            v-model:numVariables="numVariables"
-            v-model:numConstraints="numConstraints"
-            v-model:problemType="problemType"
-            :selectedMethod="selectedMethod"
+            v-model:num-variables="numVariables"
+            v-model:num-constraints="numConstraints"
+            v-model:problem-type="problemType"
+            :selected-method="selectedMethod"
             @solve="handleSolve"
           />
         </div>
@@ -370,7 +371,7 @@ watch(currentView, (newVal) => {
       <!-- Sección de Solución -->
       <section v-if="currentView === 'solution' && problemData" class="solution-section" role="region" aria-label="Solución del problema">
         <SimplexSolution
-          :problemData="problemData"
+          :problem-data="problemData"
           @reset="handleNewProblem"
         />
       </section>

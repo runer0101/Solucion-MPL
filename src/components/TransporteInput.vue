@@ -341,23 +341,23 @@ const getMejorMetodo = () => {
     <!-- Sistema de Pestañas -->
     <div class="tabs-container">
       <button
-        @click="activeTab = 'calculadora'"
         :class="{ active: activeTab === 'calculadora' }"
         class="tab-btn"
+        @click="activeTab = 'calculadora'"
       >
         Calculadora
       </button>
       <button
-        @click="activeTab = 'pasoapaso'"
         :class="{ active: activeTab === 'pasoapaso' }"
         class="tab-btn"
+        @click="activeTab = 'pasoapaso'"
       >
         Paso a Paso
       </button>
       <button
-        @click="activeTab = 'teoria'"
         :class="{ active: activeTab === 'teoria' }"
         class="tab-btn"
+        @click="activeTab = 'teoria'"
       >
         Teoría
       </button>
@@ -433,7 +433,7 @@ const getMejorMetodo = () => {
           </div>
         </div>
 
-        <button @click="activeTab = 'calculadora'" class="btn-go-calculator">
+        <button class="btn-go-calculator" @click="activeTab = 'calculadora'">
           Ir a la Calculadora
         </button>
       </div>
@@ -442,7 +442,7 @@ const getMejorMetodo = () => {
     <!-- Contenido: Teoría -->
     <div v-else-if="activeTab === 'teoria'" class="tab-content">
       <div class="method-explanation-section">
-        <MethodExplanation :selectedMethod="'penalizacion'" />
+        <MethodExplanation :selected-method="'penalizacion'" />
       </div>
     </div>
 
@@ -511,8 +511,8 @@ const getMejorMetodo = () => {
               <span class="label-help">¿Cuántas fábricas o almacenes tienes?</span>
             </label>
             <input
-              type="number"
               v-model.number="numOrigenes"
+              type="number"
               min="2"
               max="5"
               @change="actualizarTamanos"
@@ -524,14 +524,14 @@ const getMejorMetodo = () => {
               <span class="label-help">¿Cuántos clientes o tiendas debes abastecer?</span>
             </label>
             <input
-              type="number"
               v-model.number="numDestinos"
+              type="number"
               min="2"
               max="5"
               @change="actualizarTamanos"
             >
           </div>
-          <button @click="cargarEjemplo" class="btn-ejemplo">
+          <button class="btn-ejemplo" @click="cargarEjemplo">
             Cargar Ejemplo Completo
           </button>
         </div>
@@ -562,16 +562,16 @@ const getMejorMetodo = () => {
                 <td class="row-header">O{{ i }}</td>
                 <td v-for="j in numDestinos" :key="`celda-${i}-${j}`">
                   <input
-                    type="number"
                     v-model.number="costos[i-1][j-1]"
+                    type="number"
                     min="0"
                     class="costo-input"
                   >
                 </td>
                 <td>
                   <input
-                    type="number"
                     v-model.number="oferta[i-1]"
+                    type="number"
                     min="0"
                     class="oferta-input"
                   >
@@ -581,8 +581,8 @@ const getMejorMetodo = () => {
                 <td class="row-header">Demanda</td>
                 <td v-for="j in numDestinos" :key="`demanda-${j}`">
                   <input
-                    type="number"
                     v-model.number="demanda[j-1]"
+                    type="number"
                     min="0"
                     class="demanda-input"
                   >
@@ -617,33 +617,33 @@ const getMejorMetodo = () => {
         <p class="method-help">Todos los métodos buscan MINIMIZAR el costo total de transporte. Elige uno o compara todos.</p>
         <div class="method-buttons">
           <button
-            @click="metodoSeleccionado = 'esquina'"
             :class="{ active: metodoSeleccionado === 'esquina' }"
             class="method-btn"
+            @click="metodoSeleccionado = 'esquina'"
           >
             <span class="method-name">Esquina Noroeste</span>
             <span class="method-desc">Método simple y rápido</span>
           </button>
           <button
-            @click="metodoSeleccionado = 'costo'"
             :class="{ active: metodoSeleccionado === 'costo' }"
             class="method-btn"
+            @click="metodoSeleccionado = 'costo'"
           >
             <span class="method-name">Costo Mínimo</span>
             <span class="method-desc">Busca costos bajos primero</span>
           </button>
           <button
-            @click="metodoSeleccionado = 'vogel'"
             :class="{ active: metodoSeleccionado === 'vogel' }"
             class="method-btn"
+            @click="metodoSeleccionado = 'vogel'"
           >
             <span class="method-name">Aproximación de Vogel</span>
             <span class="method-desc">El más eficiente (recomendado)</span>
           </button>
           <button
-            @click="metodoSeleccionado = 'todos'"
             :class="{ active: metodoSeleccionado === 'todos' }"
             class="method-btn method-btn-all"
+            @click="metodoSeleccionado = 'todos'"
           >
             <span class="method-name">Comparar Todos</span>
             <span class="method-desc">Ver los 3 métodos y comparar</span>
@@ -653,7 +653,7 @@ const getMejorMetodo = () => {
 
       <!-- Botón resolver -->
       <div class="action-buttons">
-        <button @click="resolver" class="btn-resolver" :disabled="!esBalanceado">
+        <button class="btn-resolver" :disabled="!esBalanceado" @click="resolver">
           <span v-if="esBalanceado">Resolver y Minimizar Costos</span>
           <span v-else>El problema debe estar balanceado primero</span>
         </button>
@@ -668,8 +668,8 @@ const getMejorMetodo = () => {
       <div class="solutions-header">
         <h2>Soluciones del Problema de Transporte</h2>
         <div class="header-buttons">
-          <button @click="exportarPDF" class="btn-export">Exportar PDF</button>
-          <button @click="reiniciar" class="btn-back">← Nuevo Problema</button>
+          <button class="btn-export" @click="exportarPDF">Exportar PDF</button>
+          <button class="btn-back" @click="reiniciar">← Nuevo Problema</button>
         </div>
       </div>
 
@@ -713,7 +713,7 @@ const getMejorMetodo = () => {
             </table>
           </div>
 
-          <button @click="mostrarPasosEsquina = !mostrarPasosEsquina" class="btn-toggle-pasos">
+          <button class="btn-toggle-pasos" @click="mostrarPasosEsquina = !mostrarPasosEsquina">
             {{ mostrarPasosEsquina ? 'Ocultar Pasos Detallados' : 'Ver Pasos Detallados' }}
           </button>
 
@@ -767,7 +767,7 @@ const getMejorMetodo = () => {
             </table>
           </div>
 
-          <button @click="mostrarPasosCosto = !mostrarPasosCosto" class="btn-toggle-pasos">
+          <button class="btn-toggle-pasos" @click="mostrarPasosCosto = !mostrarPasosCosto">
             {{ mostrarPasosCosto ? 'Ocultar Pasos Detallados' : 'Ver Pasos Detallados' }}
           </button>
 
@@ -821,7 +821,7 @@ const getMejorMetodo = () => {
             </table>
           </div>
 
-          <button @click="mostrarPasosVogel = !mostrarPasosVogel" class="btn-toggle-pasos">
+          <button class="btn-toggle-pasos" @click="mostrarPasosVogel = !mostrarPasosVogel">
             {{ mostrarPasosVogel ? 'Ocultar Pasos Detallados' : 'Ver Pasos Detallados' }}
           </button>
 

@@ -185,7 +185,7 @@ const exportToPDF = async () => {
 
       <!-- Botón para volver -->
       <div class="action-buttons">
-        <button @click="emit('reset')" class="btn btn-primary">
+        <button class="btn btn-primary" @click="emit('reset')">
           Resolver Nuevo Problema
         </button>
       </div>
@@ -196,7 +196,7 @@ const exportToPDF = async () => {
       <div v-if="results.grafico.error" class="error-card">
         <h2>Error al Resolver el Problema</h2>
         <p>{{ results.grafico.message }}</p>
-        <button @click="emit('reset')" class="btn btn-primary">Volver a Intentar</button>
+        <button class="btn btn-primary" @click="emit('reset')">Volver a Intentar</button>
       </div>
       <div v-else>
         <!-- Vista simple del método gráfico -->
@@ -204,6 +204,7 @@ const exportToPDF = async () => {
           <div v-for="(step, index) in results.grafico.steps" :key="index" class="iteration-card">
             <h3>{{ step.title }}</h3>
             <div class="iteration-explanation">
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <div v-html="sanitize(step.explanation)"></div>
               </div>
             <div v-if="step.vertices" class="vertices-display">
@@ -242,7 +243,7 @@ const exportToPDF = async () => {
 
         <!-- Acciones -->
         <div class="action-buttons">
-          <button @click="emit('reset')" class="btn btn-primary">
+          <button class="btn btn-primary" @click="emit('reset')">
             Resolver Nuevo Problema
           </button>
         </div>
@@ -265,16 +266,17 @@ const exportToPDF = async () => {
             <span v-if="iteration.isOptimal" class="optimal-badge"> Óptima</span>
           </h3>
           <div class="iteration-explanation">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="sanitize(iteration.explanation)"></div>
           </div>
 
           <SimplexTable
             :tableau="iteration.tableau"
             :iteration="iteration.iteration"
-            :pivotRow="iteration.pivotRow"
-            :pivotCol="iteration.pivotCol"
-            :isOptimal="iteration.isOptimal"
-            :numOriginalVars="problemData.numVariables"
+            :pivot-row="iteration.pivotRow"
+            :pivot-col="iteration.pivotCol"
+            :is-optimal="iteration.isOptimal"
+            :num-original-vars="problemData.numVariables"
           />
         </div>
       </div>
@@ -331,13 +333,13 @@ const exportToPDF = async () => {
     <div style="height: 10px;"></div>
       <!-- Acciones -->
       <div class="action-buttons">
-        <button @click="exportToPDF" class="btn btn-secondary">
+        <button class="btn btn-secondary" @click="exportToPDF">
           Exportar a PDF
         </button>
-        <button @click="exportToText" class="btn btn-secondary">
+        <button class="btn btn-secondary" @click="exportToText">
           Exportar a Texto
         </button>
-        <button @click="emit('reset')" class="btn btn-primary">
+        <button class="btn btn-primary" @click="emit('reset')">
           Resolver Nuevo Problema
         </button>
       </div>

@@ -531,12 +531,12 @@ const esProblemaTransporte = computed(() => {
               <label for="num-vars">Número de Variables:</label>
               <input
                 id="num-vars"
-                type="number"
                 v-model.number="numVariables"
-                @input="initializeMatrices"
+                type="number"
                 min="2"
                 max="10"
                 class="form-input"
+                @input="initializeMatrices"
               >
               <small>Mínimo 2, Máximo 10</small>
             </div>
@@ -545,12 +545,12 @@ const esProblemaTransporte = computed(() => {
               <label for="num-constraints">Número de Restricciones:</label>
               <input
                 id="num-constraints"
-                type="number"
                 v-model.number="numConstraints"
-                @input="initializeMatrices"
+                type="number"
                 min="1"
                 max="10"
                 class="form-input"
+                @input="initializeMatrices"
               >
               <small>Mínimo 1, Máximo 10</small>
             </div>
@@ -728,13 +728,13 @@ const esProblemaTransporte = computed(() => {
 
       <!-- Botones de acción -->
       <div class="action-buttons">
-        <button @click="loadExample" class="btn btn-secondary btn-example">
+        <button class="btn btn-secondary btn-example" @click="loadExample">
           Cargar Ejemplo Simple (Simplex + Gráfico)
         </button>
-        <button @click="loadTransportExample" class="btn btn-secondary btn-example">
+        <button class="btn btn-secondary btn-example" @click="loadTransportExample">
           Cargar Ejemplo Transporte
         </button>
-        <button @click="compareAllMethods" class="btn btn-secondary btn-solve-main">
+        <button class="btn btn-secondary btn-solve-main" @click="compareAllMethods">
           Resolver y Comparar Métodos
         </button>
       </div>
@@ -879,7 +879,8 @@ const esProblemaTransporte = computed(() => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="method in validationResults.transportComparison.methods" :key="method.name"
+                <tr
+v-for="method in validationResults.transportComparison.methods" :key="method.name"
                     :class="{ 'best-transport-row': method.name === validationResults.transportComparison.best.method }">
                   <td>
                     {{ method.name }}
@@ -919,7 +920,7 @@ const esProblemaTransporte = computed(() => {
 
       <!-- Botón para nuevo problema al final -->
       <div class="final-actions">
-        <button @click="resetComparison" class="btn btn-secondary btn-new-problem">
+        <button class="btn btn-secondary btn-new-problem" @click="resetComparison">
           Nuevo Problema
         </button>
       </div>
