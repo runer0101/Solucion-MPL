@@ -187,7 +187,7 @@ const isZRow = (displayIndex) => {
       </table>
     </div>
 
-    <div v-if="!compact && pivotRow !== undefined && pivotCol !== undefined && !isOptimal" class="pivot-info">
+    <div v-if="!compact && pivotRow !== undefined && pivotRow >= 0 && pivotCol !== undefined && pivotCol >= 0 && !isOptimal" class="pivot-info">
       <div class="pivot-info-header">
         <span class="pivot-title">Información del Pivote</span>
       </div>

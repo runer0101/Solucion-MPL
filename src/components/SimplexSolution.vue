@@ -16,6 +16,7 @@ const emit = defineEmits(['reset'])
 // ===== ESTADO REACTIVO =====
 const results = ref({ simplex: null, grafico: null })
 const selectedMethod = ref(null)
+const solveError = ref(null)
 
 // ===== COMPUTED PROPERTIES =====
 const result = computed(() => {
@@ -26,17 +27,23 @@ const result = computed(() => {
 
 // ===== FUNCIONES =====
 const solveProblem = () => {
-  const method = props.problemData.method || 'simplex'
-  selectedMethod.value = method
+  solveError.value = null
+  try {
+    const method = props.problemData.method || 'simplex'
+    selectedMethod.value = method
 
-  if (method === 'todos') {
-    solveWithAllMethods()
-  } else if (method === 'simplex') {
-    const solver = new SimplexSolver(props.problemData)
-    results.value.simplex = solver.solve()
-  } else if (method === 'grafico') {
-    const solver = new GraphicMethodSolver(props.problemData)
-    results.value.grafico = solver.solve()
+    if (method === 'todos') {
+      solveWithAllMethods()
+    } else if (method === 'simplex') {
+      const solver = new SimplexSolver(props.problemData)
+      results.value.simplex = solver.solve()
+    } else if (method === 'grafico') {
+      const solver = new GraphicMethodSolver(props.problemData)
+      results.value.grafico = solver.solve()
+    }
+  } catch (e) {
+    solveError.value = e?.message || 'Error inesperado al resolver el problema.'
+    console.error('[SimplexSolution] Error al resolver:', e)
   }
 }
 
@@ -135,8 +142,20 @@ const exportToPDF = async () => {
 
 <template>
   <div class="simplex-solution">
+    <!-- Error boundary -->
+    <div v-if="solveError" class="solve-error-card" role="alert">
+      <div class="solve-error-icon" aria-hidden="true">⚠</div>
+      <div class="solve-error-body">
+        <h3 class="solve-error-title">No se pudo resolver el problema</h3>
+        <p class="solve-error-message">{{ solveError }}</p>
+        <button class="btn-reset-error" @click="emit('reset')">
+          Volver e intentar de nuevo
+        </button>
+      </div>
+    </div>
+
     <!-- Modo: Todos los métodos -->
-    <div v-if="selectedMethod === 'todos'" class="all-methods-container">
+    <div v-else-if="selectedMethod === 'todos'" class="all-methods-container">
       <h2 class="main-title">Comparación de Métodos de Resolución</h2>
       <p class="main-description">Se han aplicado todos los métodos disponibles para resolver el problema</p>
 
@@ -1376,5 +1395,55 @@ const exportToPDF = async () => {
   .main-title {
     font-size: 1.5rem;
   }
+}
+
+/* ===== Error boundary ===== */
+.solve-error-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: #fff5f5;
+  border: 2px solid #f87171;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+}
+
+.solve-error-icon {
+  font-size: 2rem;
+  line-height: 1;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.solve-error-body {
+  flex: 1;
+}
+
+.solve-error-title {
+  color: #991b1b;
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.solve-error-message {
+  color: #7f1d1d;
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+
+.btn-reset-error {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-reset-error:hover {
+  background: #b91c1c;
 }
 </style>
