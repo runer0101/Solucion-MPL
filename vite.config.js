@@ -19,11 +19,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
 
-  // Configuración del servidor de desarrollo
-  server: {
-    overlay: false
-  },
-
   // Optimización para producción
   build: {
     outDir: 'dist',
