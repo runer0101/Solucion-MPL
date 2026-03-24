@@ -1,7 +1,5 @@
 // Método Gráfico para Programación Lineal (2 variables)
-import { formatNumber } from './formatters.js'
-
-const EPSILON = 0.0001
+import { formatNumber, EPSILON } from './formatters.js'
 
 export class GraphicMethodSolver {
   constructor(problemData) {

@@ -1,8 +1,7 @@
 // Algoritmo del Método Simplex con explicaciones detalladas
-import { formatNumber } from './formatters.js'
+import { formatNumber, EPSILON } from './formatters.js'
 
 // Constantes de configuración
-const EPSILON = 0.0001 // Tolerancia para comparaciones numéricas
 const MAX_ITERATIONS = 100 // Máximo de iteraciones permitidas
 const BIG_M = 1e6 // Penalización para variables artificiales (Método de la M Grande)
 

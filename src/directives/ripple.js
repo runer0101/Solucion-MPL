@@ -1,6 +1,6 @@
 export const vRipple = {
   mounted(el) {
-    el.addEventListener('click', (event) => {
+    el._rippleHandler = (event) => {
       const ripple = document.createElement('span')
       const rect = el.getBoundingClientRect()
       const size = Math.max(rect.width, rect.height)
@@ -14,6 +14,10 @@ export const vRipple = {
       el.appendChild(ripple)
 
       ripple.addEventListener('animationend', () => ripple.remove())
-    })
+    }
+    el.addEventListener('click', el._rippleHandler)
+  },
+  beforeUnmount(el) {
+    el.removeEventListener('click', el._rippleHandler)
   }
 }

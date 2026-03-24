@@ -5,13 +5,13 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 
   base: '/Solucion-MPL/',
 
   plugins: [
     vue(),
-     vueDevTools(),
+    mode === 'development' && vueDevTools(),
   ],
   resolve: {
     alias: {
@@ -21,7 +21,7 @@ export default defineConfig({
 
   // Configuración del servidor de desarrollo
   server: {
-    overlay: true  // Desactiva el overlay de errores y warnings para todos
+    overlay: false
   },
 
   // Optimización para producción
@@ -38,4 +38,4 @@ export default defineConfig({
       }
     }
   }
-})
+}))
