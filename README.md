@@ -12,7 +12,7 @@ Simplex · Grafico · Transporte · Comparacion cruzada
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?style=flat-square&logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
 
-**[Ver Demo en Vivo](https://runer0101.github.io/Solucion-MPL/)** · **[Reportar Bug](https://github.com/runer0101/Solucion-MPL/issues)** · **[Solicitar Feature](https://github.com/runer0101/Solucion-MPL/issues)**
+**[Ver Demo en Vivo](https://runer0101.github.io/Solucion-MPL/)** · **[Reportar Bug](https://github.com/runer0101/Solucion-MPL/issues/new?template=bug_report.md)** · **[Solicitar Feature](https://github.com/runer0101/Solucion-MPL/issues/new?template=feature_request.md)**
 
 </div>
 
