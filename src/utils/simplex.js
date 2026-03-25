@@ -3,7 +3,6 @@ import { formatNumber, EPSILON } from './formatters.js'
 
 // Constantes de configuración
 const MAX_ITERATIONS = 100 // Máximo de iteraciones permitidas
-const BIG_M = 1e6 // Penalización para variables artificiales (Método de la M Grande)
 
 export class SimplexSolver {
   constructor(problemData) {
@@ -11,6 +10,15 @@ export class SimplexSolver {
     this.iterations = []
     this.finalSolution = null
     this.status = null
+
+    // BIG_M dinámico: al menos 1000x el coeficiente más grande del problema
+    const allValues = [
+      ...problemData.objective.map(Math.abs),
+      ...problemData.constraints.flat().map(Math.abs),
+      ...problemData.rhs.map(Math.abs)
+    ]
+    const maxCoef = Math.max(...allValues, 1)
+    this.BIG_M = maxCoef * 1000
   }
 
   /**
@@ -184,13 +192,13 @@ export class SimplexSolver {
         tiposDeVariablesAgregadas.push({ type: 'surplus', constraintIndex: indiceRestriccion })
         tiposDeVariablesAgregadas.push({ type: 'artificial', constraintIndex: indiceRestriccion })
         coeficientesObjetivo.push(0)     // Variable de exceso: no afecta Z
-        coeficientesObjetivo.push(-BIG_M) // Variable artificial: penalización Big-M (maximización)
+        coeficientesObjetivo.push(-this.BIG_M) // Variable artificial: penalización Big-M (maximización)
       } else if (tipoDeRestriccion === '=') {
         // Restricción tipo =: Agregar variable artificial
         // Ejemplo: X₁ + X₂ = 8  →  X₁ + X₂ + A₁ = 8
         contadorVariablesArtificiales++
         tiposDeVariablesAgregadas.push({ type: 'artificial', constraintIndex: indiceRestriccion })
-        coeficientesObjetivo.push(-BIG_M) // Variable artificial: penalización Big-M (maximización)
+        coeficientesObjetivo.push(-this.BIG_M) // Variable artificial: penalización Big-M (maximización)
       }
     }
 
@@ -900,4 +908,4 @@ export class SimplexSolver {
 }
 
 // Exportar constantes para uso en otros módulos si es necesario
-export { EPSILON, MAX_ITERATIONS, BIG_M }
+export { EPSILON, MAX_ITERATIONS }

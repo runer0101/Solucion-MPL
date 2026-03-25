@@ -43,7 +43,6 @@ const solveProblem = () => {
     }
   } catch (e) {
     solveError.value = e?.message || 'Error inesperado al resolver el problema.'
-    console.error('[SimplexSolution] Error al resolver:', e)
   }
 }
 
@@ -135,7 +134,7 @@ const exportToPDF = async () => {
     doc.autoTable({ head: headers, body, startY: 30 })
     doc.save('simplex-solution.pdf')
   } catch (e) {
-    console.error('Error exporting PDF', e)
+    solveError.value = 'No se pudo exportar el PDF. Intenta de nuevo.'
   }
 }
 </script>

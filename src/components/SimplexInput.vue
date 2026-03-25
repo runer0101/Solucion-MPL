@@ -36,10 +36,13 @@ const initializeMatrices = () => {
   constraintTypes.value = Array(numConstraints.value).fill('≤')
 }
 
+const isValidCoef = (v) =>
+  v !== '' && v !== null && v !== undefined && !isNaN(v) && isFinite(Number(v))
+
 const validateInputs = () => {
   for (let i = 0; i < numVariables.value; i++) {
     const coef = objectiveCoefficients.value[i]
-    if (coef === '' || coef === null || isNaN(coef)) {
+    if (!isValidCoef(coef)) {
       return `Coeficiente ${i + 1} de función objetivo inválido`
     }
   }
@@ -47,11 +50,12 @@ const validateInputs = () => {
   for (let i = 0; i < numConstraints.value; i++) {
     for (let j = 0; j < numVariables.value; j++) {
       const coef = constraintCoefficients.value[i][j]
-      if (coef === '' || coef === null || isNaN(coef)) {
+      if (!isValidCoef(coef)) {
         return `Restricción ${i + 1}, variable ${j + 1} inválida`
       }
     }
-    if (!constraintRHS.value[i] || isNaN(constraintRHS.value[i])) {
+    const rhs = constraintRHS.value[i]
+    if (!isValidCoef(rhs)) {
       return `Restricción ${i + 1}, lado derecho inválido`
     }
   }

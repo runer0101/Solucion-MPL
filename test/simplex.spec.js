@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { SimplexSolver, BIG_M } from '../src/utils/simplex.js'
+import { SimplexSolver } from '../src/utils/simplex.js'
 
 // Helper para construir problemData
 function makeProblem({ type = 'max', objective, constraints, rhs, constraintTypes }) {
@@ -147,9 +147,9 @@ describe('SimplexSolver - Restricciones ≥ con Big-M', () => {
     expect(result.status).toBe('optimal')
     // Solo debe haber 2 variables (las originales)
     expect(result.solution.variables).toHaveLength(2)
-    // Ningún valor debe ser del orden de Big-M
+    // Ningún valor debe ser del orden de Big-M (usamos la instancia dinámica)
     result.solution.variables.forEach(v =>
-      expect(Math.abs(v)).toBeLessThan(BIG_M / 2)
+      expect(Math.abs(v)).toBeLessThan(solver.BIG_M / 2)
     )
   })
 })
