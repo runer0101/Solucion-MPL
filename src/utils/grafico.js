@@ -3,6 +3,22 @@ import { formatNumber, EPSILON } from './formatters.js'
 
 export class GraphicMethodSolver {
   constructor(problemData) {
+    const { numVariables, numConstraints, objective, constraints, rhs } = problemData
+
+    if (
+      !Array.isArray(objective) || objective.length !== numVariables ||
+      !Array.isArray(constraints) || constraints.length !== numConstraints ||
+      !Array.isArray(rhs) || rhs.length !== numConstraints ||
+      constraints.some(row => !Array.isArray(row) || row.length !== numVariables)
+    ) {
+      throw new Error('problemData: dimensiones inconsistentes entre numVariables, numConstraints y los arrays.')
+    }
+
+    const allNums = [...objective, ...constraints.flat(), ...rhs]
+    if (allNums.some(v => !isFinite(v) || isNaN(v))) {
+      throw new Error('problemData: se detectaron valores NaN o Infinity en los coeficientes.')
+    }
+
     this.problemData = problemData
     this.vertices = []
     this.feasibleRegion = []

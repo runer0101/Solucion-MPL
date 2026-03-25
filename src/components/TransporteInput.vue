@@ -62,8 +62,19 @@ const esBalanceado = computed(() => {
 const totalOferta = computed(() => oferta.value.reduce((sum, val) => sum + val, 0))
 const totalDemanda = computed(() => demanda.value.reduce((sum, val) => sum + val, 0))
 
+const MAX_ORIGENES = 5
+const MAX_DESTINOS = 5
+
 // Resolver problema
 const resolver = () => {
+  if (numOrigenes.value < 2 || numOrigenes.value > MAX_ORIGENES) {
+    alert(`El número de orígenes debe estar entre 2 y ${MAX_ORIGENES}.`)
+    return
+  }
+  if (numDestinos.value < 2 || numDestinos.value > MAX_DESTINOS) {
+    alert(`El número de destinos debe estar entre 2 y ${MAX_DESTINOS}.`)
+    return
+  }
   if (!esBalanceado.value) {
     alert('El problema no está balanceado. La oferta total debe ser igual a la demanda total.')
     return

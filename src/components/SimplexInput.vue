@@ -39,7 +39,17 @@ const initializeMatrices = () => {
 const isValidCoef = (v) =>
   v !== '' && v !== null && v !== undefined && !isNaN(v) && isFinite(Number(v))
 
+const MAX_VARIABLES = 10
+const MAX_CONSTRAINTS = 10
+
 const validateInputs = () => {
+  if (numVariables.value < 1 || numVariables.value > MAX_VARIABLES) {
+    return `El número de variables debe estar entre 1 y ${MAX_VARIABLES}.`
+  }
+  if (numConstraints.value < 1 || numConstraints.value > MAX_CONSTRAINTS) {
+    return `El número de restricciones debe estar entre 1 y ${MAX_CONSTRAINTS}.`
+  }
+
   for (let i = 0; i < numVariables.value; i++) {
     const coef = objectiveCoefficients.value[i]
     if (!isValidCoef(coef)) {

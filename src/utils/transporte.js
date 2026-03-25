@@ -9,7 +9,22 @@ import { formatNumber } from './formatters.js'
  * Clase para resolver problemas de transporte
  */
 export class TransporteSolver {
-  constructor(problemData) {
+  constructor(problemData = {}) {
+    const { costos, oferta, demanda } = problemData
+
+    if (costos !== undefined) {
+      if (!Array.isArray(oferta) || !Array.isArray(demanda) || !Array.isArray(costos)) {
+        throw new Error('problemData: costos, oferta y demanda deben ser arrays.')
+      }
+      if (costos.length !== oferta.length || costos.some(row => !Array.isArray(row) || row.length !== demanda.length)) {
+        throw new Error('problemData: dimensiones de costos inconsistentes con oferta/demanda.')
+      }
+      const allNums = [...oferta, ...demanda, ...costos.flat()]
+      if (allNums.some(v => !isFinite(v) || isNaN(v))) {
+        throw new Error('problemData: se detectaron valores NaN o Infinity en costos, oferta o demanda.')
+      }
+    }
+
     this.problemData = problemData
     this.iterations = []
     this.finalSolution = null
@@ -257,8 +272,8 @@ export class TransporteSolver {
       }
 
       // Encontrar la penalización máxima
-      let maxPenalizacionFila = Math.max(...penalizacionesFilas.map(p => p.valor))
-      let maxPenalizacionColumna = Math.max(...penalizacionesColumnas.map(p => p.valor))
+      let maxPenalizacionFila = penalizacionesFilas.reduce((a, b) => (a.valor > b.valor ? a : b), { valor: -Infinity }).valor
+      let maxPenalizacionColumna = penalizacionesColumnas.reduce((a, b) => (a.valor > b.valor ? a : b), { valor: -Infinity }).valor
 
       let filaSeleccionada = -1
       let columnaSeleccionada = -1

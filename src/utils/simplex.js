@@ -6,6 +6,22 @@ const MAX_ITERATIONS = 100 // Máximo de iteraciones permitidas
 
 export class SimplexSolver {
   constructor(problemData) {
+    const { numVariables, numConstraints, objective, constraints, rhs } = problemData
+
+    if (
+      !Array.isArray(objective) || objective.length !== numVariables ||
+      !Array.isArray(constraints) || constraints.length !== numConstraints ||
+      !Array.isArray(rhs) || rhs.length !== numConstraints ||
+      constraints.some(row => !Array.isArray(row) || row.length !== numVariables)
+    ) {
+      throw new Error('problemData: dimensiones inconsistentes entre numVariables, numConstraints y los arrays.')
+    }
+
+    const allNums = [...objective, ...constraints.flat(), ...rhs]
+    if (allNums.some(v => !isFinite(v) || isNaN(v))) {
+      throw new Error('problemData: se detectaron valores NaN o Infinity en los coeficientes.')
+    }
+
     this.problemData = problemData
     this.iterations = []
     this.finalSolution = null
@@ -17,7 +33,7 @@ export class SimplexSolver {
       ...problemData.constraints.flat().map(Math.abs),
       ...problemData.rhs.map(Math.abs)
     ]
-    const maxCoef = Math.max(...allValues, 1)
+    const maxCoef = allValues.reduce((a, b) => (a > b ? a : b), 1)
     this.BIG_M = maxCoef * 1000
   }
 
