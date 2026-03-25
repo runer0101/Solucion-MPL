@@ -17,13 +17,13 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "dompurify": "^2.4.0",
+    "dompurify": "^3.3.3",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",
     "vue": "^3.5.25"
   },
   "devDependencies": {
-    "@types/dompurify": "^3.0.5",
+    "@types/dompurify": "^3.2.0",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^8.56.0",
