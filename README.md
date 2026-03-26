@@ -132,7 +132,7 @@ Solucion-MPL/
 ## Algoritmos
 
 ### Simplex
-Resolucion algebraica con pivoteo Gauss-Jordan. Maneja variables de holgura, exceso y artificiales (metodo Big-M). Detecta soluciones infactibles y no acotadas. Complejidad: O(n³) por iteracion.
+Resolucion algebraica con pivoteo Gauss-Jordan. Maneja variables de holgura, exceso y artificiales (metodo Big-M dinamico: 1000× el coeficiente maximo del problema). Detecta y reporta tres estados finales: solucion optima, problema infactible (variables artificiales en la base con valor > 0) y problema no acotado (sin fila pivote valida). Complejidad: O(n³) por iteracion.
 
 ### Grafico
 Calcula intersecciones de restricciones, identifica los vertices del poligono factible y evalua la funcion objetivo en cada extremo. Solo para 2 variables.
@@ -194,6 +194,20 @@ git push origin feat/nueva-funcionalidad
 ```
 
 Areas donde puedes contribuir: correccion de bugs matematicos, nuevos metodos de optimizacion, mejoras de UI/UX, traduccion a otros idiomas, mas tests unitarios.
+
+---
+
+## Changelog
+
+### v1.0.1
+- fix: exportacion PDF en Simplex y Transporte actualizada a API de jspdf-autotable v5
+- fix: error de PDF ya no destruye la solucion calculada
+- fix: deteccion real de problema infactible en el solver Simplex (Big-M)
+- fix: mensaje visual claro para problemas infactibles y no acotados
+
+### v1.0.0
+- Lanzamiento inicial con Simplex, Grafico y Transporte
+- CI/CD con GitHub Actions y deploy automatico a GitHub Pages
 
 ---
 
