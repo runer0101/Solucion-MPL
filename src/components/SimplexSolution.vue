@@ -17,6 +17,7 @@ const emit = defineEmits(['reset'])
 const results = ref({ simplex: null, grafico: null })
 const selectedMethod = ref(null)
 const solveError = ref(null)
+const pdfError = ref(null)
 
 // ===== COMPUTED PROPERTIES =====
 const result = computed(() => {
@@ -114,13 +115,13 @@ const exportToText = () => {
 
 const exportToPDF = async () => {
   if (!result.value) return
+  pdfError.value = null
   try {
     const { jsPDF } = await import('jspdf')
-    await import('jspdf-autotable')
+    const { default: autoTable } = await import('jspdf-autotable')
     const doc = new jsPDF()
     doc.text('Solución - Método Simplex', 14, 20)
 
-    // Tabla simple con variables
     const headers = [['Variable', 'Valor']]
     const body = []
     if (result.value.solution) {
@@ -130,11 +131,10 @@ const exportToPDF = async () => {
       body.push(['Z', formatNumber(result.value.solution.objectiveValue)])
     }
 
-    // @ts-ignore - plugin registers itself on jsPDF
-    doc.autoTable({ head: headers, body, startY: 30 })
+    autoTable(doc, { head: headers, body, startY: 30 })
     doc.save('simplex-solution.pdf')
   } catch (e) {
-    solveError.value = 'No se pudo exportar el PDF. Intenta de nuevo.'
+    pdfError.value = 'No se pudo exportar el PDF. Intenta de nuevo.'
   }
 }
 </script>
@@ -268,8 +268,22 @@ const exportToPDF = async () => {
       </div>
     </div>
 
+    <!-- Infactible -->
+    <div v-else-if="result && result.status === 'infeasible'" class="error-card">
+      <h2>Problema Infactible</h2>
+      <p>No existe solución factible. Las restricciones son contradictorias — ningún punto satisface todas al mismo tiempo.</p>
+      <button class="btn btn-primary" @click="emit('reset')">Volver a Intentar</button>
+    </div>
+
+    <!-- No acotado -->
+    <div v-else-if="result && result.status === 'unbounded'" class="error-card">
+      <h2>Problema No Acotado</h2>
+      <p>La solución es ilimitada — la función objetivo puede crecer indefinidamente sin violar ninguna restricción. Revisa que las restricciones sean suficientes para acotar el problema.</p>
+      <button class="btn btn-primary" @click="emit('reset')">Volver a Intentar</button>
+    </div>
+
     <!-- Modo: Método Simplex o Penalización (usan misma visualización) -->
-    <div v-else-if="result && !result.error">
+    <div v-else-if="result && !result.error && result.status !== 'infeasible' && result.status !== 'unbounded'">
       <!-- Vista de todas las iteraciones -->
       <div class="all-iterations-view">
         <div
@@ -350,6 +364,7 @@ const exportToPDF = async () => {
       </div>
     <div style="height: 10px;"></div>
       <!-- Acciones -->
+      <p v-if="pdfError" class="pdf-error-msg">⚠ {{ pdfError }}</p>
       <div class="action-buttons">
         <button class="btn btn-secondary" @click="exportToPDF">
           Exportar a PDF
@@ -1444,5 +1459,11 @@ const exportToPDF = async () => {
 
 .btn-reset-error:hover {
   background: #b91c1c;
+}
+
+.pdf-error-msg {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
 }
 </style>

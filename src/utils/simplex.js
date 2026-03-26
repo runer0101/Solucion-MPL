@@ -140,6 +140,28 @@ export class SimplexSolver {
         this.status = 'max_iterations'
       }
 
+      // Verificar infactibilidad: si alguna variable artificial permanece en la
+      // base con valor > 0, el problema no tiene solución factible (Big-M)
+      if (this.status === 'optimal' && formaEstandar.artificialVariables > 0) {
+        const numFilas = tablaSimplex.length - 1
+        const numCols = tablaSimplex[0].length
+        const numVarsOriginales = formaEstandar.numOriginalVariables
+        for (let fila = 0; fila < numFilas; fila++) {
+          const colBasica = this.findBasicVariableInRow(tablaSimplex, fila)
+          if (colBasica >= numVarsOriginales) {
+            const idxAux = colBasica - numVarsOriginales
+            const tipoVar = formaEstandar.variableTypes[idxAux]
+            if (tipoVar && tipoVar.type === 'artificial') {
+              const valorLD = tablaSimplex[fila][numCols - 1]
+              if (Math.abs(valorLD) > 1e-8) {
+                this.status = 'infeasible'
+                break
+              }
+            }
+          }
+        }
+      }
+
       // Extraer solución final de la tabla
       this.finalSolution = this.extractSolution(tablaSimplex, formaEstandar)
 

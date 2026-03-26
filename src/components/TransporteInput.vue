@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import TransporteSolver from '../utils/transporte.js'
 import MethodExplanation from './MethodExplanation.vue'
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 
 // ===== ESTADO REACTIVO =====
 const numOrigenes = ref(3)
@@ -197,7 +197,7 @@ const exportarPDF = () => {
   }
   costosBody.push(['Demanda', ...demanda.value, totalOferta.value])
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: yPosition,
     head: [costosHeaders],
     body: costosBody,
@@ -238,7 +238,7 @@ const exportarPDF = () => {
       asignacionBody.push(row)
     }
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: yPosition,
       head: [asignacionHeaders],
       body: asignacionBody,
@@ -303,7 +303,7 @@ const exportarPDF = () => {
       ['Aproximación de Vogel', soluciones.value.vogel.costoTotal.toString(), getQualityText(soluciones.value.vogel.costoTotal)]
     ]
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: yPosition,
       head: [comparacionHeaders],
       body: comparacionBody,
