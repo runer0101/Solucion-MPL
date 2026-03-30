@@ -304,6 +304,9 @@ export class TransporteSolver {
         }
       }
 
+      // Guardia: si no se encontró celda válida, terminar para evitar bucle infinito
+      if (filaSeleccionada === -1 || columnaSeleccionada === -1) break
+
       // Asignar cantidad
       const i = filaSeleccionada
       const j = columnaSeleccionada
