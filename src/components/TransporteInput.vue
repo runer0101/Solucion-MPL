@@ -128,7 +128,7 @@ const cargarEjemplo = () => {
     [8, 16, 24]
   ]
   oferta.value = [76, 82, 77]
-  demanda.value = [72, 102, 41]
+  demanda.value = [72, 102, 61]
 }
 
 // Funciones para comparación de calidad
