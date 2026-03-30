@@ -313,7 +313,7 @@ const performCrossValidation = () => {
   // Función auxiliar para comparar valores numéricos
   const areEqual = (val1, val2, tolerance = TOLERANCE) => {
     if (val1 === null || val2 === null || val1 === undefined || val2 === undefined) return false
-    return Math.abs(val1 - val2) <= Math.abs(val1) * tolerance
+    return Math.abs(val1 - val2) <= Math.abs(val1) * tolerance + 1e-9
   }
 
   // Validación de convergencia de métodos de programación lineal
