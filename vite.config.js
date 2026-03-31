@@ -27,8 +27,8 @@ export default defineConfig(({ mode }) => ({
     // Reducir el tamaño del bundle
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vue-vendor': ['vue']
+        manualChunks: (id) => {
+          if (id.includes('node_modules/vue')) return 'vue-vendor'
         }
       }
     }
