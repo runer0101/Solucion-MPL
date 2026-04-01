@@ -70,7 +70,7 @@ onMounted(() => {
 const sanitize = (html) => {
   try {
     return DOMPurify.sanitize(html || '')
-  } catch (e) {
+  } catch {
     return ''
   }
 }
@@ -133,7 +133,7 @@ const exportToPDF = async () => {
 
     autoTable(doc, { head: headers, body, startY: 30 })
     doc.save('simplex-solution.pdf')
-  } catch (e) {
+  } catch {
     pdfError.value = 'No se pudo exportar el PDF. Intenta de nuevo.'
   }
 }

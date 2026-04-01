@@ -208,7 +208,7 @@ const compareAllMethods = () => {
           error: resultado.message || 'No se encontró solución factible'
         }
       }
-    } catch (error) {
+    } catch {
       solutionResults.value.grafico = { error: 'No se pudo resolver con el método gráfico' }
     }
   }
@@ -232,7 +232,7 @@ const compareAllMethods = () => {
         error: resultado.message || 'No se encontró solución factible'
       }
     }
-  } catch (error) {
+  } catch {
     solutionResults.value.simplex = { error: 'No se pudo resolver con el método simplex' }
   }
 
@@ -288,7 +288,7 @@ const compareAllMethods = () => {
         // Guardar cuál es el mejor
         solutionResults.value.mejorTransporte = mejorMetodo.nombre
 
-      } catch (error) {
+      } catch {
         solutionResults.value.esquinaNoroeste = { error: 'Error al calcular', factible: false }
         solutionResults.value.costoMinimo = { error: 'Error al calcular', factible: false }
         solutionResults.value.vogel = { error: 'Error al calcular', factible: false }
