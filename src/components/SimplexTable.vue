@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify'
 const sanitize = (html) => {
   try {
     return DOMPurify.sanitize(html || '')
-  } catch (e) {
+  } catch {
     return ''
   }
 }
